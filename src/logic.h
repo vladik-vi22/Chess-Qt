@@ -2,6 +2,12 @@
 #include <memory>
 #include <QAbstractListModel>
 
+struct Move
+{
+    int x;
+    int y;
+};
+
 class Logic: public QAbstractListModel
 {
     Q_OBJECT
@@ -26,6 +32,17 @@ public:
 
     Q_INVOKABLE void clear();
     Q_INVOKABLE bool move(int fromX, int fromY, int toX, int toY);
+    Q_INVOKABLE bool trueCell(int X, int Y);
+    Q_INVOKABLE bool freeCell(int X, int Y);
+    Q_INVOKABLE bool enemies(int fromX, int fromY, int toX, int toY);
+    Q_INVOKABLE QList<Move> possibleMoves(int fromX, int fromY);
+    Q_INVOKABLE QList<Move> possibleMovesPawnW(int fromX, int fromY);
+    Q_INVOKABLE QList<Move> possibleMovesPawnB(int fromX, int fromY);
+    Q_INVOKABLE QList<Move> possibleMovesRook(int fromX, int fromY);
+    Q_INVOKABLE QList<Move> possibleMovesKnight(int fromX, int fromY);
+    Q_INVOKABLE QList<Move> possibleMovesBishop(int fromX, int fromY);
+    Q_INVOKABLE QList<Move> possibleMovesQueen(int fromX, int fromY);
+    Q_INVOKABLE QList<Move> possibleMovesKing(int fromX, int fromY);
 
 protected:
     int rowCount(const QModelIndex & parent) const override;
