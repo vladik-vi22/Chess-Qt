@@ -27,71 +27,71 @@ ApplicationWindow {
     ]
 
     Item {
-      id: gameBoard
-      x: 0
-      y: 0
-      width : logic.boardSize * squareSize
-      height: logic.boardSize * squareSize
-      
-      Image {
-        source: "/images/chess_board.jpg"
-        height: gameBoard.height
-        width: gameBoard.width
-      }
-      
-      Repeater {
-        model: logic
+        id: gameBoard
+        x: 0
+        y: 0
+        width : logic.boardSize * squareSize
+        height: logic.boardSize * squareSize
 
         Image {
-          height: squareSize
-          width : squareSize
-
-          x: squareSize * positionX
-          y: squareSize * positionY
-
-          source: images[type].imgPath
-          
-          MouseArea {
-            anchors.fill: parent
-            drag.target: parent
-
-            property int startX: 0
-            property int startY: 0
-
-            onPressed: {
-              startX = parent.x;
-              startY = parent.y;
-            }
-
-            onReleased: {
-              var fromX = startX / squareSize;
-              var fromY = startY / squareSize;
-              var toX   = (parent.x + mouseX) / squareSize;
-              var toY   = (parent.y + mouseY) / squareSize;
-
-              if (!logic.move(fromX, fromY, toX, toY)) {
-                parent.x = startX;
-                parent.y = startY;
-              }
-                //logic.move(fromX, fromY, toX, toY);
-            }
-          }
+            source: "/images/chess_board.jpg"
+            height: gameBoard.height
+            width: gameBoard.width
         }
-      }
+
+        Repeater {
+            model: logic
+
+            Image {
+                height: squareSize
+                width : squareSize
+
+                x: squareSize * positionX
+                y: squareSize * positionY
+
+                source: images[type].imgPath
+
+                MouseArea {
+                    anchors.fill: parent
+                    drag.target: parent
+
+                    property int startX: 0
+                    property int startY: 0
+
+                    onPressed: {
+                        startX = parent.x;
+                        startY = parent.y;
+                    }
+
+                    onReleased: {
+                        var fromX = startX / squareSize;
+                        var fromY = startY / squareSize;
+                        var toX   = (parent.x + mouseX) / squareSize;
+                        var toY   = (parent.y + mouseY) / squareSize;
+                        console.log("fromX = ", fromX, " fromY = ",fromY, " toX = ", toX, " toY = ", toY);
+
+                        if (!logic.move(fromX, fromY, toX, toY)) {
+                            parent.x = startX;
+                            parent.y = startY;
+                        }
+                    }
+                }
+            }
+        }
     }
 
 
     Button {
-      id: startButton
-      anchors.left: gameBoard.right
-      anchors.right: parent.right
-      anchors.leftMargin: 10
-      anchors.rightMargin: 10
-      
-      text: "Clear"
+        id: startButton
+        anchors.left: gameBoard.right
+        anchors.right: parent.right
+        anchors.leftMargin: 10
+        anchors.rightMargin: 10
 
-      onClicked: {
-        logic.clear();
-      }
+        text: "Clear"
+
+        onClicked: {
+            logic.clear();
+        }
     }
 }
