@@ -21,6 +21,7 @@ public:
         Type = Qt::UserRole,
         PositionX,
         PositionY,
+        Alive,
     };
     
 public:
@@ -35,6 +36,7 @@ public:
     Q_INVOKABLE bool trueCell(int X, int Y);
     Q_INVOKABLE bool freeCell(int X, int Y);
     Q_INVOKABLE bool enemies(int fromX, int fromY, int toX, int toY);
+    Q_INVOKABLE bool alive(int X, int Y);
     Q_INVOKABLE QList<Move> possibleMoves(int fromX, int fromY);
     Q_INVOKABLE QList<Move> possibleMovesPawnW(int fromX, int fromY);
     Q_INVOKABLE QList<Move> possibleMovesPawnB(int fromX, int fromY);

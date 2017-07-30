@@ -9,6 +9,7 @@ struct Figure
     int type;
     int x;
     int y;
+    bool alive;
 };
 
 struct Logic::Impl
@@ -33,38 +34,38 @@ Logic::Logic(QObject *parent)
     : QAbstractListModel(parent)
     , impl(new Impl())
 {
-    impl->figures << Figure { 0, 0, 6 };
-    impl->figures << Figure { 0, 1, 6 };
-    impl->figures << Figure { 0, 2, 6 };
-    impl->figures << Figure { 0, 3, 6 };
-    impl->figures << Figure { 0, 4, 6 };
-    impl->figures << Figure { 0, 5, 6 };
-    impl->figures << Figure { 0, 6, 6 };
-    impl->figures << Figure { 0, 7, 6 };
-    impl->figures << Figure { 1, 0, 1 };
-    impl->figures << Figure { 1, 1, 1 };
-    impl->figures << Figure { 1, 2, 1 };
-    impl->figures << Figure { 1, 3, 1 };
-    impl->figures << Figure { 1, 4, 1 };
-    impl->figures << Figure { 1, 5, 1 };
-    impl->figures << Figure { 1, 6, 1 };
-    impl->figures << Figure { 1, 7, 1 };
-    impl->figures << Figure { 2, 0, 7 };
-    impl->figures << Figure { 2, 7, 7 };
-    impl->figures << Figure { 3, 0, 0 };
-    impl->figures << Figure { 3, 7, 0 };
-    impl->figures << Figure { 4, 1, 7 };
-    impl->figures << Figure { 4, 6, 7 };
-    impl->figures << Figure { 5, 1, 0 };
-    impl->figures << Figure { 5, 6, 0 };
-    impl->figures << Figure { 6, 2, 7 };
-    impl->figures << Figure { 6, 5, 7 };
-    impl->figures << Figure { 7, 2, 0 };
-    impl->figures << Figure { 7, 5, 0 };
-    impl->figures << Figure { 8, 3, 7 };
-    impl->figures << Figure { 9, 3, 0 };
-    impl->figures << Figure { 10, 4, 7 };
-    impl->figures << Figure { 11, 4, 0 };
+    impl->figures << Figure { 0, 0, 6 , true};
+    impl->figures << Figure { 0, 1, 6 , true};
+    impl->figures << Figure { 0, 2, 6 , true};
+    impl->figures << Figure { 0, 3, 6 , true};
+    impl->figures << Figure { 0, 4, 6 , true};
+    impl->figures << Figure { 0, 5, 6 , true};
+    impl->figures << Figure { 0, 6, 6 , true};
+    impl->figures << Figure { 0, 7, 6 , true};
+    impl->figures << Figure { 1, 0, 1 , true};
+    impl->figures << Figure { 1, 1, 1 , true};
+    impl->figures << Figure { 1, 2, 1 , true};
+    impl->figures << Figure { 1, 3, 1 , true};
+    impl->figures << Figure { 1, 4, 1 , true};
+    impl->figures << Figure { 1, 5, 1 , true};
+    impl->figures << Figure { 1, 6, 1 , true};
+    impl->figures << Figure { 1, 7, 1 , true};
+    impl->figures << Figure { 2, 0, 7 , true};
+    impl->figures << Figure { 2, 7, 7 , true};
+    impl->figures << Figure { 3, 0, 0 , true};
+    impl->figures << Figure { 3, 7, 0 , true};
+    impl->figures << Figure { 4, 1, 7 , true};
+    impl->figures << Figure { 4, 6, 7 , true};
+    impl->figures << Figure { 5, 1, 0 , true};
+    impl->figures << Figure { 5, 6, 0 , true};
+    impl->figures << Figure { 6, 2, 7 , true};
+    impl->figures << Figure { 6, 5, 7 , true};
+    impl->figures << Figure { 7, 2, 0 , true};
+    impl->figures << Figure { 7, 5, 0 , true};
+    impl->figures << Figure { 8, 3, 7 , true};
+    impl->figures << Figure { 9, 3, 0 , true};
+    impl->figures << Figure { 10, 4, 7 , true};
+    impl->figures << Figure { 11, 4, 0 , true};
 }
 
 Logic::~Logic() {
@@ -83,6 +84,7 @@ QHash<int, QByteArray> Logic::roleNames() const {
     names.insert(Roles::Type      , "type");
     names.insert(Roles::PositionX , "positionX");
     names.insert(Roles::PositionY , "positionY");
+    names.insert(Roles::Alive     , "alive");
     return names;
 }
 
@@ -103,6 +105,7 @@ QVariant Logic::data(const QModelIndex & modelIndex, int role) const {
     case Roles::Type     : return figure.type;
     case Roles::PositionX: return figure.x;
     case Roles::PositionY: return figure.y;
+    case Roles::Alive    : return figure.alive;
     }
     return QVariant();
 }
@@ -117,22 +120,16 @@ bool Logic::move(int fromX, int fromY, int toX, int toY) {
 
     int fromIndex = impl->findByPosition(fromX, fromY);
     int toIndex = impl->findByPosition(toX, toY);
-    QList<Move> possibleMovesfromXfromY;
-    possibleMovesfromXfromY = possibleMoves(fromX, fromY);
+    std::cout << "fromIndex " << fromIndex << "; toIndex " << toIndex << std::endl;
 
-    for(int pmIndex = 0; pmIndex < possibleMovesfromXfromY.size(); ++pmIndex){
-        if ((toX == possibleMovesfromXfromY[pmIndex].x) && (toY == possibleMovesfromXfromY[pmIndex].y)){
-            if (freeCell(toX, toY)){
-                impl->figures[fromIndex].x = toX;
-                impl->figures[fromIndex].y = toY;
-                QModelIndex topLeft = createIndex(fromIndex, 0);
-                QModelIndex bottomRight = createIndex(fromIndex, 0);
-                emit dataChanged(topLeft, bottomRight);
-                return true;
-            }
-            else{
-                impl->figures.removeAt(toIndex);
-                if (fromIndex < toIndex){
+    if (fromIndex >= 0){
+
+        QList<Move> possibleMovesfromXfromY;
+        possibleMovesfromXfromY = possibleMoves(fromX, fromY);
+
+        for(int pmIndex = 0; pmIndex < possibleMovesfromXfromY.size(); ++pmIndex){
+            if ((toX == possibleMovesfromXfromY[pmIndex].x) && (toY == possibleMovesfromXfromY[pmIndex].y)){
+                if (freeCell(toX, toY)){
                     impl->figures[fromIndex].x = toX;
                     impl->figures[fromIndex].y = toY;
                     QModelIndex topLeft = createIndex(fromIndex, 0);
@@ -140,18 +137,26 @@ bool Logic::move(int fromX, int fromY, int toX, int toY) {
                     emit dataChanged(topLeft, bottomRight);
                     return true;
                 }
-                else{
-                    impl->figures[fromIndex - 1].x = toX;
-                    impl->figures[fromIndex - 1].y = toY;
-                    QModelIndex topLeft = createIndex(fromIndex - 1, 0);
-                    QModelIndex bottomRight = createIndex(fromIndex - 1, 0);
+                else if (enemies(fromX, fromY, toX, toY)){
+                    impl->figures[toIndex].alive = false;
+                    impl->figures[fromIndex].x = toX;
+                    impl->figures[fromIndex].y = toY;
+                    QModelIndex topLeft = createIndex(fromIndex, 0);
+                    QModelIndex bottomRight = createIndex(fromIndex, 0);
                     emit dataChanged(topLeft, bottomRight);
                     return true;
+
                 }
             }
         }
     }
+    impl->figures[fromIndex].x = fromX;
+    impl->figures[fromIndex].y = fromY;
+    QModelIndex topLeft = createIndex(fromIndex, 0);
+    QModelIndex bottomRight = createIndex(fromIndex, 0);
+    emit dataChanged(topLeft, bottomRight);
     return false;
+}
 
 
 
@@ -167,8 +172,8 @@ bool Logic::move(int fromX, int fromY, int toX, int toY) {
   QModelIndex topLeft = createIndex(index, 0);
   QModelIndex bottomRight = createIndex(index, 0);
   emit dataChanged(topLeft, bottomRight);
-  return true;*/
-}
+  return true;
+}*/
 
 bool Logic::trueCell(int X, int Y){
     return ((X >= 0) && (X < BOARD_SIZE) && (Y >= 0) && (Y < BOARD_SIZE));
@@ -188,6 +193,11 @@ bool Logic::enemies(int fromX, int fromY, int toX, int toY) {
     }
     else
         return false;
+}
+
+bool Logic::alive(int X, int Y){
+    int Index = impl->findByPosition(X, Y);
+    return impl->figures[Index].alive;
 }
 
 QList<Move> Logic::possibleMoves(int fromX, int fromY) {
