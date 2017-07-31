@@ -15,3 +15,6 @@ QML_IMPORT_PATH =
 
 HEADERS += \
     src/logic.h
+
+DISTFILES += \
+    src/SavedGame

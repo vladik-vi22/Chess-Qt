@@ -70,6 +70,7 @@ ApplicationWindow {
                         var toY   = (parent.y + mouseY) / squareSize;
 
                         logic.move(fromX, fromY, toX, toY);
+                        logic.saveGame();
 
                     }
                 }

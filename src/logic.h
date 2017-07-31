@@ -8,6 +8,25 @@ struct Move
     int y;
 };
 
+struct Figure
+{
+    int type;
+    int x;
+    int y;
+    bool alive;
+};
+
+struct FullMove
+{
+    int fromX;
+    int fromY;
+    int toX;
+    int toY;
+};
+
+QDataStream &operator <<(QDataStream &stream, const Figure &figure);
+QDataStream &operator >>(QDataStream &stream, Figure &figure);
+
 class Logic: public QAbstractListModel
 {
     Q_OBJECT
@@ -32,6 +51,9 @@ public:
     int boardSize() const;
 
     Q_INVOKABLE void clear();
+    Q_INVOKABLE QList<Figure> newGameFigures();
+    Q_INVOKABLE QList<Figure> loadGameFigures();
+    Q_INVOKABLE void saveGame();
     Q_INVOKABLE bool move(int fromX, int fromY, int toX, int toY);
     Q_INVOKABLE bool trueCell(int X, int Y);
     Q_INVOKABLE bool freeCell(int X, int Y);

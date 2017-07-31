@@ -2,15 +2,12 @@
 #include <QList>
 #include <QByteArray>
 #include <QHash>
+#include <QFile>
+#include <QDataStream>
 #include <iostream>
 
-struct Figure
-{
-    int type;
-    int x;
-    int y;
-    bool alive;
-};
+
+QList<FullMove> ThisGame;
 
 struct Logic::Impl
 {
@@ -34,38 +31,7 @@ Logic::Logic(QObject *parent)
     : QAbstractListModel(parent)
     , impl(new Impl())
 {
-    impl->figures << Figure { 0, 0, 6 , true};
-    impl->figures << Figure { 0, 1, 6 , true};
-    impl->figures << Figure { 0, 2, 6 , true};
-    impl->figures << Figure { 0, 3, 6 , true};
-    impl->figures << Figure { 0, 4, 6 , true};
-    impl->figures << Figure { 0, 5, 6 , true};
-    impl->figures << Figure { 0, 6, 6 , true};
-    impl->figures << Figure { 0, 7, 6 , true};
-    impl->figures << Figure { 1, 0, 1 , true};
-    impl->figures << Figure { 1, 1, 1 , true};
-    impl->figures << Figure { 1, 2, 1 , true};
-    impl->figures << Figure { 1, 3, 1 , true};
-    impl->figures << Figure { 1, 4, 1 , true};
-    impl->figures << Figure { 1, 5, 1 , true};
-    impl->figures << Figure { 1, 6, 1 , true};
-    impl->figures << Figure { 1, 7, 1 , true};
-    impl->figures << Figure { 2, 0, 7 , true};
-    impl->figures << Figure { 2, 7, 7 , true};
-    impl->figures << Figure { 3, 0, 0 , true};
-    impl->figures << Figure { 3, 7, 0 , true};
-    impl->figures << Figure { 4, 1, 7 , true};
-    impl->figures << Figure { 4, 6, 7 , true};
-    impl->figures << Figure { 5, 1, 0 , true};
-    impl->figures << Figure { 5, 6, 0 , true};
-    impl->figures << Figure { 6, 2, 7 , true};
-    impl->figures << Figure { 6, 5, 7 , true};
-    impl->figures << Figure { 7, 2, 0 , true};
-    impl->figures << Figure { 7, 5, 0 , true};
-    impl->figures << Figure { 8, 3, 7 , true};
-    impl->figures << Figure { 9, 3, 0 , true};
-    impl->figures << Figure { 10, 4, 7 , true};
-    impl->figures << Figure { 11, 4, 0 , true};
+    impl->figures = newGameFigures();
 }
 
 Logic::~Logic() {
@@ -110,13 +76,94 @@ QVariant Logic::data(const QModelIndex & modelIndex, int role) const {
     return QVariant();
 }
 
+QDataStream &operator <<(QDataStream &stream, const Figure &figure)
+{
+    stream<<figure.type;
+    stream<<figure.x;
+    stream<<figure.y;
+    stream<<figure.alive;
+    return stream;
+}
+
+QDataStream &operator >>(QDataStream &stream, Figure &figure)
+{
+    stream>>figure.type;
+    stream>>figure.x;
+    stream>>figure.y;
+    stream>>figure.alive;
+    return stream;
+}
+
 void Logic::clear() {
     beginResetModel();
     impl->figures.clear();
     endResetModel();
 }
 
+QList<Figure> Logic::newGameFigures(){
+    QList<Figure> NewGameFigures;
+    NewGameFigures << Figure { 0, 0, 6 , true};
+    NewGameFigures << Figure { 0, 1, 6 , true};
+    NewGameFigures << Figure { 0, 2, 6 , true};
+    NewGameFigures << Figure { 0, 3, 6 , true};
+    NewGameFigures << Figure { 0, 4, 6 , true};
+    NewGameFigures << Figure { 0, 5, 6 , true};
+    NewGameFigures << Figure { 0, 6, 6 , true};
+    NewGameFigures << Figure { 0, 7, 6 , true};
+    NewGameFigures << Figure { 1, 0, 1 , true};
+    NewGameFigures << Figure { 1, 1, 1 , true};
+    NewGameFigures << Figure { 1, 2, 1 , true};
+    NewGameFigures << Figure { 1, 3, 1 , true};
+    NewGameFigures << Figure { 1, 4, 1 , true};
+    NewGameFigures << Figure { 1, 5, 1 , true};
+    NewGameFigures << Figure { 1, 6, 1 , true};
+    NewGameFigures << Figure { 1, 7, 1 , true};
+    NewGameFigures << Figure { 2, 0, 7 , true};
+    NewGameFigures << Figure { 2, 7, 7 , true};
+    NewGameFigures << Figure { 3, 0, 0 , true};
+    NewGameFigures << Figure { 3, 7, 0 , true};
+    NewGameFigures << Figure { 4, 1, 7 , true};
+    NewGameFigures << Figure { 4, 6, 7 , true};
+    NewGameFigures << Figure { 5, 1, 0 , true};
+    NewGameFigures << Figure { 5, 6, 0 , true};
+    NewGameFigures << Figure { 6, 2, 7 , true};
+    NewGameFigures << Figure { 6, 5, 7 , true};
+    NewGameFigures << Figure { 7, 2, 0 , true};
+    NewGameFigures << Figure { 7, 5, 0 , true};
+    NewGameFigures << Figure { 8, 3, 7 , true};
+    NewGameFigures << Figure { 9, 3, 0 , true};
+    NewGameFigures << Figure { 10, 4, 7 , true};
+    NewGameFigures << Figure { 11, 4, 0 , true};
+    return NewGameFigures;
+}
+
+void Logic::saveGame(){
+    QFile savedGame("/home/vladik/Projects/Qt/Chess/src/SavedGame");
+    savedGame.open(QFile::Append);
+    QDataStream out(&savedGame);
+    for (int i = 0; i < impl->figures.size(); ++i)
+        out << impl->figures[i];
+    savedGame.close();
+}
+
+QList<Figure> Logic::loadGameFigures(){
+    QList<Figure> LoadGameFigures;
+    QFile loadGame("/home/vladik/Projects/Qt/Chess/src/SavedGame");
+    loadGame.open(QFile::ReadOnly);
+    QDataStream in(&loadGame);
+    for (int i = 0; i < 32; ++i)
+        in >> LoadGameFigures;
+    loadGame.close();
+    return LoadGameFigures;
+}
+
 bool Logic::move(int fromX, int fromY, int toX, int toY) {
+
+    FullMove ThisMove;
+    ThisMove.fromX = fromX;
+    ThisMove.fromY = fromY;
+    ThisMove.toX = toX;
+    ThisMove.toY = toY;
 
     int fromIndex = impl->findByPosition(fromX, fromY);
     int toIndex = impl->findByPosition(toX, toY);
@@ -135,6 +182,7 @@ bool Logic::move(int fromX, int fromY, int toX, int toY) {
                     QModelIndex topLeft = createIndex(fromIndex, 0);
                     QModelIndex bottomRight = createIndex(fromIndex, 0);
                     emit dataChanged(topLeft, bottomRight);
+                    ThisGame.append(ThisMove);
                     return true;
                 }
                 else if (enemies(fromX, fromY, toX, toY)){
@@ -144,6 +192,7 @@ bool Logic::move(int fromX, int fromY, int toX, int toY) {
                     QModelIndex topLeft = createIndex(fromIndex, 0);
                     QModelIndex bottomRight = createIndex(fromIndex, 0);
                     emit dataChanged(topLeft, bottomRight);
+                    ThisGame.append(ThisMove);
                     return true;
 
                 }
@@ -157,23 +206,6 @@ bool Logic::move(int fromX, int fromY, int toX, int toY) {
     emit dataChanged(topLeft, bottomRight);
     return false;
 }
-
-
-
-    /*  int index = impl->findByPosition(fromX, fromY);
-
-  if (index < 0) return false;
-  
-  if (toX < 0 || toX >= BOARD_SIZE || toY < 0 || toY >= BOARD_SIZE || impl->findByPosition(toX, toY) >= 0) {
-    return false;
-  }
-  impl->figures[index].x = toX;
-  impl->figures[index].y = toY;
-  QModelIndex topLeft = createIndex(index, 0);
-  QModelIndex bottomRight = createIndex(index, 0);
-  emit dataChanged(topLeft, bottomRight);
-  return true;
-}*/
 
 bool Logic::trueCell(int X, int Y){
     return ((X >= 0) && (X < BOARD_SIZE) && (Y >= 0) && (Y < BOARD_SIZE));
