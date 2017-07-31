@@ -24,9 +24,6 @@ struct FullMove
     int toY;
 };
 
-QDataStream &operator <<(QDataStream &stream, const Figure &figure);
-QDataStream &operator >>(QDataStream &stream, Figure &figure);
-
 class Logic: public QAbstractListModel
 {
     Q_OBJECT

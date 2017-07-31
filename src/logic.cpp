@@ -76,24 +76,6 @@ QVariant Logic::data(const QModelIndex & modelIndex, int role) const {
     return QVariant();
 }
 
-QDataStream &operator <<(QDataStream &stream, const Figure &figure)
-{
-    stream<<figure.type;
-    stream<<figure.x;
-    stream<<figure.y;
-    stream<<figure.alive;
-    return stream;
-}
-
-QDataStream &operator >>(QDataStream &stream, Figure &figure)
-{
-    stream>>figure.type;
-    stream>>figure.x;
-    stream>>figure.y;
-    stream>>figure.alive;
-    return stream;
-}
-
 void Logic::clear() {
     beginResetModel();
     impl->figures.clear();
@@ -139,20 +121,30 @@ QList<Figure> Logic::newGameFigures(){
 
 void Logic::saveGame(){
     QFile savedGame("/home/vladik/Projects/Qt/Chess/src/SavedGame");
-    savedGame.open(QFile::Append);
+    savedGame.open(QFile::WriteOnly);
     QDataStream out(&savedGame);
-    for (int i = 0; i < impl->figures.size(); ++i)
-        out << impl->figures[i];
+    for (int i = 0; i < 32; ++i){
+        out << impl->figures[i].type;
+        out << impl->figures[i].x;
+        out << impl->figures[i].y;
+        out << impl->figures[i].alive;
+    }
     savedGame.close();
 }
 
 QList<Figure> Logic::loadGameFigures(){
     QList<Figure> LoadGameFigures;
+    Figure LoadFigure;
     QFile loadGame("/home/vladik/Projects/Qt/Chess/src/SavedGame");
     loadGame.open(QFile::ReadOnly);
     QDataStream in(&loadGame);
-    for (int i = 0; i < 32; ++i)
-        in >> LoadGameFigures;
+    for (int i = 0; i < 32; ++i){
+        in >> LoadFigure.type;
+        in >> LoadFigure.x;
+        in >> LoadFigure.y;
+        in >> LoadFigure.alive;
+        LoadGameFigures.append(LoadFigure);
+    }
     loadGame.close();
     return LoadGameFigures;
 }
