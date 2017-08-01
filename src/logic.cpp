@@ -84,52 +84,19 @@ void Logic::clear() {
 
 QList<Figure> Logic::newGameFigures(){
     QList<Figure> NewGameFigures;
-    NewGameFigures << Figure { 0, 0, 6 , true};
-    NewGameFigures << Figure { 0, 1, 6 , true};
-    NewGameFigures << Figure { 0, 2, 6 , true};
-    NewGameFigures << Figure { 0, 3, 6 , true};
-    NewGameFigures << Figure { 0, 4, 6 , true};
-    NewGameFigures << Figure { 0, 5, 6 , true};
-    NewGameFigures << Figure { 0, 6, 6 , true};
-    NewGameFigures << Figure { 0, 7, 6 , true};
-    NewGameFigures << Figure { 1, 0, 1 , true};
-    NewGameFigures << Figure { 1, 1, 1 , true};
-    NewGameFigures << Figure { 1, 2, 1 , true};
-    NewGameFigures << Figure { 1, 3, 1 , true};
-    NewGameFigures << Figure { 1, 4, 1 , true};
-    NewGameFigures << Figure { 1, 5, 1 , true};
-    NewGameFigures << Figure { 1, 6, 1 , true};
-    NewGameFigures << Figure { 1, 7, 1 , true};
-    NewGameFigures << Figure { 2, 0, 7 , true};
-    NewGameFigures << Figure { 2, 7, 7 , true};
-    NewGameFigures << Figure { 3, 0, 0 , true};
-    NewGameFigures << Figure { 3, 7, 0 , true};
-    NewGameFigures << Figure { 4, 1, 7 , true};
-    NewGameFigures << Figure { 4, 6, 7 , true};
-    NewGameFigures << Figure { 5, 1, 0 , true};
-    NewGameFigures << Figure { 5, 6, 0 , true};
-    NewGameFigures << Figure { 6, 2, 7 , true};
-    NewGameFigures << Figure { 6, 5, 7 , true};
-    NewGameFigures << Figure { 7, 2, 0 , true};
-    NewGameFigures << Figure { 7, 5, 0 , true};
-    NewGameFigures << Figure { 8, 3, 7 , true};
-    NewGameFigures << Figure { 9, 3, 0 , true};
-    NewGameFigures << Figure { 10, 4, 7 , true};
-    NewGameFigures << Figure { 11, 4, 0 , true};
-    return NewGameFigures;
-}
-
-void Logic::saveGame(){
-    QFile savedGame("/home/vladik/Projects/Qt/Chess/src/SavedGame");
-    savedGame.open(QFile::WriteOnly);
-    QDataStream out(&savedGame);
+    Figure NewFigure;
+    QFile newGame("/home/vladik/Projects/Qt/Chess/src/NewGame");
+    newGame.open(QFile::ReadOnly);
+    QDataStream in(&newGame);
     for (int i = 0; i < 32; ++i){
-        out << impl->figures[i].type;
-        out << impl->figures[i].x;
-        out << impl->figures[i].y;
-        out << impl->figures[i].alive;
+        in >> NewFigure.type;
+        in >> NewFigure.x;
+        in >> NewFigure.y;
+        in >> NewFigure.alive;
+        NewGameFigures.append(NewFigure);
     }
-    savedGame.close();
+    newGame.close();
+    return NewGameFigures;
 }
 
 QList<Figure> Logic::loadGameFigures(){
@@ -149,6 +116,19 @@ QList<Figure> Logic::loadGameFigures(){
     return LoadGameFigures;
 }
 
+void Logic::saveGame(){
+    QFile savedGame("/home/vladik/Projects/Qt/Chess/src/SavedGame");
+    savedGame.open(QFile::WriteOnly);
+    QDataStream out(&savedGame);
+    for (int i = 0; i < 32; ++i){
+        out << impl->figures[i].type;
+        out << impl->figures[i].x;
+        out << impl->figures[i].y;
+        out << impl->figures[i].alive;
+    }
+    savedGame.close();
+}
+
 bool Logic::move(int fromX, int fromY, int toX, int toY) {
 
     FullMove ThisMove;
@@ -156,37 +136,52 @@ bool Logic::move(int fromX, int fromY, int toX, int toY) {
     ThisMove.fromY = fromY;
     ThisMove.toX = toX;
     ThisMove.toY = toY;
+    ThisMove.deadIndex = -1;
 
     int fromIndex = impl->findByPosition(fromX, fromY);
     int toIndex = impl->findByPosition(toX, toY);
-    std::cout << "fromIndex " << fromIndex << "; toIndex " << toIndex << std::endl;
 
-    if (fromIndex >= 0){
+    if ((fromIndex >= 0) && impl->figures[fromIndex].alive){
+        if (((impl->figures[fromIndex].type % 2 == 0) && WhiteMove) || ((impl->figures[fromIndex].type % 2 == 1) && (!WhiteMove))){
 
-        QList<Move> possibleMovesfromXfromY;
-        possibleMovesfromXfromY = possibleMoves(fromX, fromY);
+            QList<Move> possibleMovesfromXfromY;
+            possibleMovesfromXfromY = possibleMoves(fromX, fromY);
 
-        for(int pmIndex = 0; pmIndex < possibleMovesfromXfromY.size(); ++pmIndex){
-            if ((toX == possibleMovesfromXfromY[pmIndex].x) && (toY == possibleMovesfromXfromY[pmIndex].y)){
-                if (freeCell(toX, toY)){
-                    impl->figures[fromIndex].x = toX;
-                    impl->figures[fromIndex].y = toY;
-                    QModelIndex topLeft = createIndex(fromIndex, 0);
-                    QModelIndex bottomRight = createIndex(fromIndex, 0);
-                    emit dataChanged(topLeft, bottomRight);
-                    ThisGame.append(ThisMove);
-                    return true;
-                }
-                else if (enemies(fromX, fromY, toX, toY)){
-                    impl->figures[toIndex].alive = false;
-                    impl->figures[fromIndex].x = toX;
-                    impl->figures[fromIndex].y = toY;
-                    QModelIndex topLeft = createIndex(fromIndex, 0);
-                    QModelIndex bottomRight = createIndex(fromIndex, 0);
-                    emit dataChanged(topLeft, bottomRight);
-                    ThisGame.append(ThisMove);
-                    return true;
+            for(int pmIndex = 0; pmIndex < possibleMovesfromXfromY.size(); ++pmIndex){
+                if ((toX == possibleMovesfromXfromY[pmIndex].x) && (toY == possibleMovesfromXfromY[pmIndex].y)){
+                    if (freeCell(toX, toY)){
+                        impl->figures[fromIndex].x = toX;
+                        impl->figures[fromIndex].y = toY;
 
+                        QModelIndex topLeft = createIndex(fromIndex, 0);
+                        QModelIndex bottomRight = createIndex(fromIndex, 0);
+                        emit dataChanged(topLeft, bottomRight);
+
+                        ThisGame.append(ThisMove);
+                        WhiteMove = !WhiteMove;
+                        return true;
+                    }
+                    else if (enemies(fromX, fromY, toX, toY)){
+
+                        impl->figures[toIndex].alive = false;
+                        impl->figures[toIndex].x = 8;       /// temporary
+                        impl->figures[toIndex].y = 8;       /// temporary
+                        QModelIndex topLeftTo = createIndex(toIndex, 0);
+                        QModelIndex bottomRightTo = createIndex(toIndex, 0);
+                        emit dataChanged(topLeftTo, bottomRightTo);
+
+                        impl->figures[fromIndex].x = toX;
+                        impl->figures[fromIndex].y = toY;
+                        QModelIndex topLeftFrom = createIndex(fromIndex, 0);
+                        QModelIndex bottomRightFrom = createIndex(fromIndex, 0);
+                        emit dataChanged(topLeftFrom, bottomRightFrom);
+
+                        ThisMove.deadIndex = toIndex;
+                        ThisGame.append(ThisMove);
+                        WhiteMove = !WhiteMove;
+                        return true;
+
+                    }
                 }
             }
         }

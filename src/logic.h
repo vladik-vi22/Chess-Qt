@@ -22,6 +22,7 @@ struct FullMove
     int fromY;
     int toX;
     int toY;
+    int deadIndex;
 };
 
 class Logic: public QAbstractListModel
@@ -39,6 +40,8 @@ public:
         PositionY,
         Alive,
     };
+
+    bool WhiteMove = true;
     
 public:
     explicit Logic(QObject *parent = 0);

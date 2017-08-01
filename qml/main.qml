@@ -4,10 +4,11 @@ import QtQuick.Layouts 1.1
 import QtQuick.Dialogs 1.2
 
 ApplicationWindow {
+    id: gameWindow
     title: qsTr("Chess")
     visible: true
-    width: 800
-    height: 600
+    width: gameBoard.width + 222
+    height: gameBoard.height
     
     property int squareSize: 70
 
@@ -43,6 +44,9 @@ ApplicationWindow {
             model: logic
 
             Image {
+                visible: alive
+                enabled: alive
+
                 height: squareSize
                 width : squareSize
 
@@ -70,26 +74,44 @@ ApplicationWindow {
                         var toY   = (parent.y + mouseY) / squareSize;
 
                         logic.move(fromX, fromY, toX, toY);
-                        logic.saveGame();
-
                     }
                 }
             }
         }
     }
 
-
     Button {
-        id: startButton
+        id: saveGame
         anchors.left: gameBoard.right
         anchors.right: parent.right
+        anchors.top: gameBoard.top
         anchors.leftMargin: 10
         anchors.rightMargin: 10
+        anchors.topMargin: 10
+        anchors.bottomMargin: 10
+        height: 44
 
-        text: "Clear"
+        text: "Save Game"
 
-        onClicked: {
-            logic.clear();
-        }
+        onClicked: logic.saveGame();
     }
+
+    Button{
+        id: exit
+        anchors.left: gameBoard.right
+        anchors.right: parent.right
+        anchors.bottom: gameBoard.bottom
+        anchors.leftMargin: 10
+        anchors.rightMargin: 10
+        anchors.topMargin: 10
+        anchors.bottomMargin: 10
+        height: 44
+
+        text: "Exit"
+
+        onClicked: gameWindow.close();
+
+    }
+
 }
+

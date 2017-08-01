@@ -17,4 +17,5 @@ HEADERS += \
     src/logic.h
 
 DISTFILES += \
-    src/SavedGame
+    src/SavedGame \
+    src/NewGame
