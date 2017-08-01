@@ -7,8 +7,6 @@
 #include <iostream>
 
 
-QList<FullMove> ThisGame;
-
 struct Logic::Impl
 {
     QList<Figure> figures;
@@ -31,7 +29,7 @@ Logic::Logic(QObject *parent)
     : QAbstractListModel(parent)
     , impl(new Impl())
 {
-    impl->figures = newGameFigures();
+    impl->figures = GameFigures;
 }
 
 Logic::~Logic() {
@@ -116,6 +114,43 @@ QList<Figure> Logic::loadGameFigures(){
     return LoadGameFigures;
 }
 
+QList<FullMove> Logic::lastGameIn(){
+    QList<FullMove> LastGameIn;
+    FullMove LastGameMove;
+    QFile lastGameIn("/home/vladik/Projects/Qt/Chess/src/LastGame");
+    lastGameIn.open(QFile::ReadOnly);
+    QDataStream in(&lastGameIn);
+    for (int i = 0; i < (lastGameIn.size() / 20); ++i){
+        in >> LastGameMove.fromX;
+        in >> LastGameMove.fromY;
+        in >> LastGameMove.toX;
+        in >> LastGameMove.toY;
+        in >> LastGameMove.deadIndex;
+        LastGameIn.append(LastGameMove);
+    }
+    lastGameIn.close();
+    return LastGameIn;
+}
+
+void Logic::newGame(){
+    impl->figures = newGameFigures();
+    for (int Index = 0; Index < 32; Index++){
+        QModelIndex topLeft = createIndex(Index, 0);
+        QModelIndex bottomRight = createIndex(Index, 0);
+        emit dataChanged(topLeft, bottomRight);
+    }
+    indexMove = 0;
+}
+
+void Logic::loadGame(){
+    impl->figures = loadGameFigures();
+    for (int Index = 0; Index < 32; Index++){
+        QModelIndex topLeft = createIndex(Index, 0);
+        QModelIndex bottomRight = createIndex(Index, 0);
+        emit dataChanged(topLeft, bottomRight);
+    }
+}
+
 void Logic::saveGame(){
     QFile savedGame("/home/vladik/Projects/Qt/Chess/src/SavedGame");
     savedGame.open(QFile::WriteOnly);
@@ -127,6 +162,39 @@ void Logic::saveGame(){
         out << impl->figures[i].alive;
     }
     savedGame.close();
+}
+
+void Logic::lastGame(){
+    LastGame = lastGameIn();
+}
+
+void Logic::lastGameOut(){
+    QFile lastGameOut("/home/vladik/Projects/Qt/Chess/src/LastGame");
+    lastGameOut.open(QFile::WriteOnly);
+    QDataStream out(&lastGameOut);
+    for (int i = 0; i < ThisGame.size(); ++i){
+        out << ThisGame[i].fromX;
+        out << ThisGame[i].fromY;
+        out << ThisGame[i].toX;
+        out << ThisGame[i].toY;
+        out << ThisGame[i].deadIndex;
+    }
+    lastGameOut.close();
+}
+
+int Logic::endGame(){
+    if (!impl->figures[30].alive){
+        WhiteMove = true;
+        lastGameOut();
+        return 2;
+    }
+    else if (!impl->figures[31].alive){
+        WhiteMove = true;
+        lastGameOut();
+        return 1;
+    }
+    else
+        return 0;
 }
 
 bool Logic::move(int fromX, int fromY, int toX, int toY) {
@@ -193,6 +261,70 @@ bool Logic::move(int fromX, int fromY, int toX, int toY) {
     emit dataChanged(topLeft, bottomRight);
     return false;
 }
+
+void Logic::prevMove(){
+
+    if (indexMove > 0){
+
+        FullMove move = LastGame[indexMove - 1];
+
+        int toIndex = impl->findByPosition(move.toX, move.toY);
+
+        impl->figures[toIndex].x = move.fromX;
+        impl->figures[toIndex].y = move.fromY;
+        QModelIndex topLeftFrom = createIndex(toIndex, 0);
+        QModelIndex bottomRightFrom = createIndex(toIndex, 0);
+        emit dataChanged(topLeftFrom, bottomRightFrom);
+
+        if (move.deadIndex >= 0){
+            impl->figures[move.deadIndex].alive = true;
+            impl->figures[move.deadIndex].x = move.toX;       /// temporary
+            impl->figures[move.deadIndex].y = move.toY;       /// temporary
+            QModelIndex topLeftTo = createIndex(move.deadIndex, 0);
+            QModelIndex bottomRightTo = createIndex(move.deadIndex, 0);
+            emit dataChanged(topLeftTo, bottomRightTo);
+        }
+
+        indexMove--;
+
+    }
+}
+
+bool Logic::enablePrevMove(){
+    return true; //(indexMove > 0);
+}
+
+void Logic::nextMove(){
+    if (impl->figures[30].alive && impl->figures[31].alive){
+        FullMove move = LastGame[indexMove];
+
+        int fromIndex = impl->findByPosition(move.fromX, move.fromY);
+        int toIndex = impl->findByPosition(move.toX, move.toY);
+
+        if (move.deadIndex >= 0){
+            impl->figures[toIndex].alive = false;
+            impl->figures[toIndex].x = 8;       /// temporary
+            impl->figures[toIndex].y = 8;       /// temporary
+            QModelIndex topLeftTo = createIndex(toIndex, 0);
+            QModelIndex bottomRightTo = createIndex(toIndex, 0);
+            emit dataChanged(topLeftTo, bottomRightTo);
+        }
+
+        impl->figures[fromIndex].x = move.toX;
+        impl->figures[fromIndex].y = move.toY;
+        QModelIndex topLeftFrom = createIndex(fromIndex, 0);
+        QModelIndex bottomRightFrom = createIndex(fromIndex, 0);
+        emit dataChanged(topLeftFrom, bottomRightFrom);
+
+        indexMove++;
+
+    }
+}
+
+bool Logic::enableNextMove(){
+    return true; //(impl->figures[30].alive && impl->figures[31].alive);
+}
+
 
 bool Logic::trueCell(int X, int Y){
     return ((X >= 0) && (X < BOARD_SIZE) && (Y >= 0) && (Y < BOARD_SIZE));

@@ -41,7 +41,11 @@ public:
         Alive,
     };
 
+    int indexMove = 0;
     bool WhiteMove = true;
+    QList<FullMove> ThisGame;
+    QList<FullMove> LastGame;
+    QList<Figure> GameFigures = newGameFigures();
     
 public:
     explicit Logic(QObject *parent = 0);
@@ -53,8 +57,18 @@ public:
     Q_INVOKABLE void clear();
     Q_INVOKABLE QList<Figure> newGameFigures();
     Q_INVOKABLE QList<Figure> loadGameFigures();
+    Q_INVOKABLE QList<FullMove> lastGameIn();
+    Q_INVOKABLE void newGame();
+    Q_INVOKABLE void loadGame();
     Q_INVOKABLE void saveGame();
+    Q_INVOKABLE void lastGameOut();
+    Q_INVOKABLE void lastGame();
+    Q_INVOKABLE int endGame();
     Q_INVOKABLE bool move(int fromX, int fromY, int toX, int toY);
+    Q_INVOKABLE void prevMove();
+    Q_INVOKABLE bool enablePrevMove();
+    Q_INVOKABLE void nextMove();
+    Q_INVOKABLE bool enableNextMove();
     Q_INVOKABLE bool trueCell(int X, int Y);
     Q_INVOKABLE bool freeCell(int X, int Y);
     Q_INVOKABLE bool enemies(int fromX, int fromY, int toX, int toY);

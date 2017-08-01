@@ -18,4 +18,5 @@ HEADERS += \
 
 DISTFILES += \
     src/SavedGame \
-    src/NewGame
+    src/NewGame \
+    src/LastGame
