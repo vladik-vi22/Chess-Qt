@@ -80,14 +80,6 @@ public:
     Q_INVOKABLE bool enemies(int fromX, int fromY, int toX, int toY);
     Q_INVOKABLE bool alive(int X, int Y);
     Q_INVOKABLE QList<Move> possibleMoves(int fromX, int fromY);
-    Q_INVOKABLE QList<Move> possibleMovesPawnW(int fromX, int fromY);
-    Q_INVOKABLE QList<Move> possibleMovesPawnB(int fromX, int fromY);
-    Q_INVOKABLE QList<Move> possibleMovesRook(int fromX, int fromY);
-    Q_INVOKABLE QList<Move> possibleMovesKnight(int fromX, int fromY);
-    Q_INVOKABLE QList<Move> possibleMovesBishop(int fromX, int fromY);
-    Q_INVOKABLE QList<Move> possibleMovesQueen(int fromX, int fromY);
-    Q_INVOKABLE QList<Move> possibleMovesKing(int fromX, int fromY);
-
 protected:
     int rowCount(const QModelIndex & parent) const override;
     QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const override;
@@ -96,4 +88,11 @@ protected:
 private:
     struct Impl;
     std::unique_ptr<Impl> impl;
+    QList<Move> possibleMovesPawnW(int fromX, int fromY);
+    QList<Move> possibleMovesPawnB(int fromX, int fromY);
+    QList<Move> possibleMovesRook(int fromX, int fromY);
+    QList<Move> possibleMovesKnight(int fromX, int fromY);
+    QList<Move> possibleMovesBishop(int fromX, int fromY);
+    QList<Move> possibleMovesQueen(int fromX, int fromY);
+    QList<Move> possibleMovesKing(int fromX, int fromY);
 };

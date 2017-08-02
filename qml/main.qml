@@ -29,8 +29,6 @@ ApplicationWindow{
 
     property string winner: "End of Game"
 
-    property bool visiblePrevNext: false
-
     Button{
         id: newGame
         anchors.left: menuWindow.left
@@ -48,10 +46,13 @@ ApplicationWindow{
         onClicked: {
             logic.newGame();
             menuWindow.hide();
-            visiblePrevNext = false
-            gameWindow.show();
+            prevMove.visible = false
+            nextMove.visible = false
+            currentMove.visible = true
+            gameBoard.enabled = true
             whiteMove.visible = logic.whiteMove();
             blackMove.visible = !logic.whiteMove();
+            gameWindow.show();
         }
     }
 
@@ -72,10 +73,15 @@ ApplicationWindow{
         onClicked: {
             logic.loadGame();
             menuWindow.hide();
-            visiblePrevNext = true
-            gameWindow.show();
+            prevMove.visible = true
+            nextMove.visible = true
+            prevMove.enabled = true
+            nextMove.enabled = false
+            currentMove.visible = true
             whiteMove.visible = logic.whiteMove();
             blackMove.visible = !logic.whiteMove();
+            gameBoard.enabled = true
+            gameWindow.show();
         }
     }
 
@@ -96,7 +102,15 @@ ApplicationWindow{
         onClicked: {
             logic.newGame();
             menuWindow.hide();
-            showLastGameWindow.show();
+            gameWindow.show();
+            prevMove.visible = true
+            nextMove.visible = true
+            prevMove.enabled = false
+            nextMove.enabled = true
+            whiteMove.visible = false
+            blackMove.visible = false
+            currentMove.visible = false
+            gameBoard.enabled = false
             logic.lastGame();
         }
     }
@@ -248,7 +262,6 @@ ApplicationWindow{
 
         Button {
             id: prevMove
-            visible: visiblePrevNext
             anchors.left: gameBoard.right
             anchors.right: parent.right
             anchors.top: saveGame.bottom
@@ -271,8 +284,6 @@ ApplicationWindow{
 
         Button {
             id: nextMove
-            visible: visiblePrevNext
-            enabled: false
             anchors.left: gameBoard.right
             anchors.right: parent.right
             anchors.top: prevMove.bottom
@@ -310,9 +321,10 @@ ApplicationWindow{
 
             onClicked: {
                 logic.newGame();
-                menuWindow.hide();
-                visiblePrevNext = false
-                gameWindow.show();
+                prevMove.visible = false
+                nextMove.visible = false
+                currentMove.visible = true
+                gameBoard.enabled = true
                 whiteMove.visible = logic.whiteMove();
                 blackMove.visible = !logic.whiteMove();
             }
@@ -333,9 +345,12 @@ ApplicationWindow{
 
             onClicked: {
                 logic.loadGame();
-                menuWindow.hide();
-                visiblePrevNext = true
-                gameWindow.show();
+                prevMove.visible = true
+                nextMove.visible = true
+                prevMove.enabled = true
+                nextMove.enabled = false
+                currentMove.visible = true
+                gameBoard.enabled = true
                 whiteMove.visible = logic.whiteMove();
                 blackMove.visible = !logic.whiteMove();
             }
@@ -392,107 +407,6 @@ ApplicationWindow{
             onClicked: {
                 endWindow.hide();
                 menuWindow.show();
-            }
-        }
-    }
-
-    ApplicationWindow {
-        id: showLastGameWindow
-        title: qsTr("Chess")
-        width: gameBoard.width + 222
-        height: gameBoard.height
-
-        Item {
-            id: showLastGameBoard
-            x: 0
-            y: 0
-            width : logic.boardSize * squareSize
-            height: logic.boardSize * squareSize
-
-            Image {
-                source: "/images/chess_board.jpg"
-                height: showLastGameBoard.height
-                width: showLastGameBoard.width
-            }
-
-            Repeater {
-                model: logic
-
-                Image {
-                    visible: alive
-                    enabled: alive
-
-                    height: squareSize
-                    width : squareSize
-
-                    x: squareSize * positionX
-                    y: squareSize * positionY
-
-                    source: images[type].imgPath
-
-                }
-            }
-
-            Button{
-                id: next
-                anchors.left: showLastGameBoard.right
-                anchors.top: showLastGameBoard.top
-                anchors.leftMargin: 10
-                anchors.rightMargin: 10
-                anchors.topMargin: 10
-                anchors.bottomMargin: 10
-                height: showLastGameBoard.height / 3
-                width: showLastGameWindow.width - showLastGameBoard.width - 10
-
-                text: "next"
-
-                onClicked:{
-                    logic.nextMove();
-                    prev.enabled = true
-                    if (logic.lastEnableNextMove())
-                        next.enabled = false
-                }
-            }
-
-            Button {
-                id: prev
-                enabled: false
-                anchors.left: showLastGameBoard.right
-                anchors.top: next.bottom
-                anchors.leftMargin: 10
-                anchors.rightMargin: 10
-                anchors.topMargin: 10
-                anchors.bottomMargin: 10
-                height: showLastGameBoard.height / 3
-                width: showLastGameWindow.width - showLastGameBoard.width - 10
-
-                text: "prev"
-
-                onClicked:{
-                    logic.prevMove();
-                    next.enabled = true
-                    if (logic.lastEnablePrevMove())
-                        prev.enabled = false
-                }
-            }
-
-            Button{
-                id: menu3
-                anchors.left: showLastGameBoard.right
-                anchors.bottom: showLastGameBoard.bottom
-                anchors.leftMargin: 10
-                anchors.rightMargin: 10
-                anchors.topMargin: 10
-                anchors.bottomMargin: 10
-                height: 44
-                width: showLastGameWindow.width - showLastGameBoard.width - 10
-
-                text: "Menu"
-
-                onClicked: {
-                    showLastGameWindow.hide();
-                    menuWindow.show();
-                }
             }
         }
     }

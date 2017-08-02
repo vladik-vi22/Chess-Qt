@@ -16,7 +16,7 @@ struct Logic::Impl
 };
 
 int Logic::Impl::findByPosition(int x, int y) {
-    for (int i(0); i<figures.size(); ++i) {
+    for (int i = 0; i < figures.size(); ++i) {
         if (figures[i].x != x || figures[i].y != y ) {
             continue;
         }
@@ -276,7 +276,7 @@ QList<FullMove> Logic::lastGameIn(){
     lastGameInF.open(QFile::ReadOnly);
     QDataStream in(&lastGameInF);
 
-    for (int i = 0; i < (lastGameInF.size() / sizeof(FullMove)); ++i){
+    for (uint i = 0; i < (lastGameInF.size() / sizeof(FullMove)); ++i){
         in >> LastGameMove.fromX;
         in >> LastGameMove.fromY;
         in >> LastGameMove.toX;
