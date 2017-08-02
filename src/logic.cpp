@@ -83,7 +83,7 @@ void Logic::clear() {
 
 void Logic::newGame(){
     impl->figures = newGameFigures();
-    for (int Index = 0; Index < 32; Index++){
+    for (int Index = 0; Index < NUMBER_OF_FIGURES; Index++){
         QModelIndex topLeft = createIndex(Index, 0);
         QModelIndex bottomRight = createIndex(Index, 0);
         emit dataChanged(topLeft, bottomRight);
@@ -92,7 +92,7 @@ void Logic::newGame(){
 
 void Logic::loadGame(){
     impl->figures = loadGameFigures();
-    for (int Index = 0; Index < 32; Index++){
+    for (int Index = 0; Index < NUMBER_OF_FIGURES; Index++){
         QModelIndex topLeft = createIndex(Index, 0);
         QModelIndex bottomRight = createIndex(Index, 0);
         emit dataChanged(topLeft, bottomRight);
@@ -105,7 +105,7 @@ void Logic::saveGame(){
     savedGameF.open(QFile::WriteOnly);
     QDataStream out(&savedGameF);
 
-    for (int i = 0; i < 32; ++i){
+    for (int i = 0; i < NUMBER_OF_FIGURES; ++i){
         out << impl->figures[i].type;
         out << impl->figures[i].x;
         out << impl->figures[i].y;
@@ -132,7 +132,7 @@ QList<Figure> Logic::newGameFigures(){
     newGameF.open(QFile::ReadOnly);
     QDataStream in(&newGameF);
 
-    for (int i = 0; i < 32; ++i){
+    for (int i = 0; i < NUMBER_OF_FIGURES; ++i){
         in >> NewFigure.type;
         in >> NewFigure.x;
         in >> NewFigure.y;
@@ -159,7 +159,7 @@ QList<Figure> Logic::loadGameFigures(){
     loadGameF.open(QFile::ReadOnly);
     QDataStream in(&loadGameF);
 
-    for (int i = 0; i < 32; ++i){
+    for (int i = 0; i < NUMBER_OF_FIGURES; ++i){
         in >> LoadFigure.type;
         in >> LoadFigure.x;
         in >> LoadFigure.y;
@@ -217,8 +217,8 @@ bool Logic::move(int fromX, int fromY, int toX, int toY) {
                     else if (enemies(fromX, fromY, toX, toY)){
 
                         impl->figures[toIndex].alive = false;
-                        impl->figures[toIndex].x = 8;       /// temporary
-                        impl->figures[toIndex].y = 8;       /// temporary
+                        impl->figures[toIndex].x = XY_OUT_OF_DESK;
+                        impl->figures[toIndex].y = XY_OUT_OF_DESK;
                         QModelIndex topLeftTo = createIndex(toIndex, 0);
                         QModelIndex bottomRightTo = createIndex(toIndex, 0);
                         emit dataChanged(topLeftTo, bottomRightTo);
@@ -249,12 +249,12 @@ bool Logic::move(int fromX, int fromY, int toX, int toY) {
 }
 
 int Logic::endGame(){
-    if (!impl->figures[30].alive){
+    if (!impl->figures[INDEX_OF_WHITE_KING].alive){
         WhiteMove = true;
         lastGameOut();
         return 2;
     }
-    else if (!impl->figures[31].alive){
+    else if (!impl->figures[INDEX_OF_BLACK_KING].alive){
         WhiteMove = true;
         lastGameOut();
         return 1;
@@ -276,7 +276,7 @@ QList<FullMove> Logic::lastGameIn(){
     lastGameInF.open(QFile::ReadOnly);
     QDataStream in(&lastGameInF);
 
-    for (int i = 0; i < (lastGameInF.size() / 20); ++i){
+    for (int i = 0; i < (lastGameInF.size() / sizeof(FullMove)); ++i){
         in >> LastGameMove.fromX;
         in >> LastGameMove.fromY;
         in >> LastGameMove.toX;
@@ -320,8 +320,8 @@ bool Logic::prevMove(){
 
         if (move.deadIndex >= 0){
             impl->figures[move.deadIndex].alive = true;
-            impl->figures[move.deadIndex].x = move.toX;       /// temporary
-            impl->figures[move.deadIndex].y = move.toY;       /// temporary
+            impl->figures[move.deadIndex].x = move.toX;
+            impl->figures[move.deadIndex].y = move.toY;
             QModelIndex topLeftTo = createIndex(move.deadIndex, 0);
             QModelIndex bottomRightTo = createIndex(move.deadIndex, 0);
             emit dataChanged(topLeftTo, bottomRightTo);
@@ -352,8 +352,8 @@ bool Logic::nextMove(){
 
         if (move.deadIndex >= 0){
             impl->figures[toIndex].alive = false;
-            impl->figures[toIndex].x = 8;       /// temporary
-            impl->figures[toIndex].y = 8;       /// temporary
+            impl->figures[toIndex].x = XY_OUT_OF_DESK;
+            impl->figures[toIndex].y = XY_OUT_OF_DESK;
             QModelIndex topLeftTo = createIndex(toIndex, 0);
             QModelIndex bottomRightTo = createIndex(toIndex, 0);
             emit dataChanged(topLeftTo, bottomRightTo);

@@ -31,14 +31,18 @@ class Logic: public QAbstractListModel
 public:
 
     enum GlobalConstants {
-        BOARD_SIZE = 8
+        BOARD_SIZE = 8,
+        NUMBER_OF_FIGURES = 32,
+        INDEX_OF_WHITE_KING = 30,
+        INDEX_OF_BLACK_KING = 31,
+        XY_OUT_OF_DESK = 8
     };
 
     enum Roles {
         Type = Qt::UserRole,
         PositionX,
         PositionY,
-        Alive,
+        Alive
     };
 
     int indexMove = 0;
