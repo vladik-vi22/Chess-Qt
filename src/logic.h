@@ -44,7 +44,6 @@ public:
     int indexMove = 0;
     bool WhiteMove = true;
     QList<FullMove> ThisGame;
-    QList<FullMove> LastGame;
     QList<Figure> GameFigures = newGameFigures();
     
 public:
@@ -65,10 +64,8 @@ public:
     Q_INVOKABLE void lastGame();
     Q_INVOKABLE int endGame();
     Q_INVOKABLE bool move(int fromX, int fromY, int toX, int toY);
-    Q_INVOKABLE void prevMove();
-    Q_INVOKABLE bool enablePrevMove();
-    Q_INVOKABLE void nextMove();
-    Q_INVOKABLE bool enableNextMove();
+    Q_INVOKABLE bool prevMove();
+    Q_INVOKABLE bool nextMove();
     Q_INVOKABLE bool trueCell(int X, int Y);
     Q_INVOKABLE bool freeCell(int X, int Y);
     Q_INVOKABLE bool enemies(int fromX, int fromY, int toX, int toY);

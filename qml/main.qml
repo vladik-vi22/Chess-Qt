@@ -27,7 +27,10 @@ ApplicationWindow{
         {'imgPath' : "/images/black_king.svg"}
     ]
 
-    property var winner: "End of Game"
+    property string winner: "End of Game"
+
+    property bool visiblePrevNext: false
+    property bool enabledFigure: false
 
     Button{
         id: newGame
@@ -46,6 +49,7 @@ ApplicationWindow{
         onClicked: {
             logic.newGame();
             menuWindow.hide();
+            visiblePrevNext = false
             gameWindow.show();
         }
     }
@@ -67,6 +71,7 @@ ApplicationWindow{
         onClicked: {
             logic.loadGame();
             menuWindow.hide();
+            visiblePrevNext = true
             gameWindow.show();
         }
     }
@@ -83,7 +88,7 @@ ApplicationWindow{
         width: menuWindow.width
         height: menuWindow.height / 4 - 10
 
-        text: "Last Game"
+        text: "Show Last Game"
 
         onClicked: {
             logic.newGame();
@@ -131,6 +136,7 @@ ApplicationWindow{
 
             Repeater {
                 model: logic
+                enabled: true
 
                 Image {
                     visible: alive
@@ -175,6 +181,7 @@ ApplicationWindow{
                                 gameWindow.hide();
                                 endWindow.show();
                             }
+
                         }
                     }
                 }
@@ -195,6 +202,41 @@ ApplicationWindow{
             text: "Save Game"
 
             onClicked: logic.saveGame();
+        }
+
+        Button {
+            id: prevMove
+            visible: visiblePrevNext
+            anchors.left: gameBoard.right
+            anchors.right: parent.right
+            anchors.top: saveGame.bottom
+            anchors.leftMargin: 10
+            anchors.rightMargin: 10
+            anchors.topMargin: 10
+            anchors.bottomMargin: 10
+            height: 44
+
+            text: "prev"
+
+            onClicked: logic.prevMove()
+        }
+
+        Button {
+            id: nextMove
+            visible: visiblePrevNext
+            anchors.left: gameBoard.right
+            anchors.right: parent.right
+            anchors.top: prevMove.bottom
+            anchors.leftMargin: 10
+            anchors.rightMargin: 10
+            anchors.topMargin: 10
+            anchors.bottomMargin: 10
+            height: 44
+
+            text: "next"
+
+            onClicked: logic.nextMove()
+
         }
 
         Button{
@@ -291,7 +333,6 @@ ApplicationWindow{
 
             Button{
                 id: next
-                enabled: logic.enableNextMove()
                 anchors.left: showLastGameBoard.right
                 anchors.top: showLastGameBoard.top
                 anchors.leftMargin: 10
@@ -310,7 +351,6 @@ ApplicationWindow{
 
             Button {
                 id: prev
-                enabled: logic.enablePrevMove()
                 anchors.left: showLastGameBoard.right
                 anchors.top: next.bottom
                 anchors.leftMargin: 10
