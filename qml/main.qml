@@ -97,7 +97,7 @@ ApplicationWindow{
         width: menuWindow.width
         height: menuWindow.height / 4 - 10
 
-        text: "Show Last Game"
+        text: "Show Last Finished Game"
 
         onClicked: {
             logic.newGame();
@@ -301,6 +301,18 @@ ApplicationWindow{
                 if (logic.lastEnableNextMove()){
                     nextMove.enabled = false
                     gameBoard.enabled = true
+                }
+
+                if(logic.endGame() === 1){
+                    winner = " White Win! "
+                    gameWindow.hide();
+                    endWindow.show();
+                }
+
+                if(logic.endGame() === 2){
+                    winner = " Black Win! "
+                    gameWindow.hide();
+                    endWindow.show();
                 }
             }
 
