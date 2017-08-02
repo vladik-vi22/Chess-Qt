@@ -66,6 +66,11 @@ public:
     Q_INVOKABLE bool move(int fromX, int fromY, int toX, int toY);
     Q_INVOKABLE bool prevMove();
     Q_INVOKABLE bool nextMove();
+    Q_INVOKABLE bool enablePrevMove();
+    Q_INVOKABLE bool enableNextMove();
+    Q_INVOKABLE bool lastEnablePrevMove();
+    Q_INVOKABLE bool lastEnableNextMove();
+    Q_INVOKABLE bool whiteMove();
     Q_INVOKABLE bool trueCell(int X, int Y);
     Q_INVOKABLE bool freeCell(int X, int Y);
     Q_INVOKABLE bool enemies(int fromX, int fromY, int toX, int toY);

@@ -33,7 +33,7 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = Chess1.0.0
-DISTDIR = /home/vladik/Projects/Qt/Chess-Qt-master/.tmp/Chess1.0.0
+DISTDIR = /home/vladik/Projects/Qt/Chess/.tmp/Chess1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-rpath,/home/vladik/Software/Qt/5.6/gcc_64/lib
 LIBS          = $(SUBLIBS) -L/home/vladik/Software/Qt/5.6/gcc_64/lib -lQt5Quick -L/usr/lib64 -lQt5Widgets -lQt5Gui -lQt5Qml -lQt5Network -lQt5Core -lGL -lpthread 
@@ -624,7 +624,7 @@ moc_logic.cpp: ../../../Software/Qt/5.6/gcc_64/include/QtCore/QAbstractListModel
 		../../../Software/Qt/5.6/gcc_64/include/QtCore/qset.h \
 		../../../Software/Qt/5.6/gcc_64/include/QtCore/qcontiguouscache.h \
 		src/logic.h
-	/home/vladik/Software/Qt/5.6/gcc_64/bin/moc $(DEFINES) -I/home/vladik/Software/Qt/5.6/gcc_64/mkspecs/linux-g++ -I/home/vladik/Projects/Qt/Chess-Qt-master -I/home/vladik/Software/Qt/5.6/gcc_64/include -I/home/vladik/Software/Qt/5.6/gcc_64/include/QtQuick -I/home/vladik/Software/Qt/5.6/gcc_64/include/QtWidgets -I/home/vladik/Software/Qt/5.6/gcc_64/include/QtGui -I/home/vladik/Software/Qt/5.6/gcc_64/include/QtQml -I/home/vladik/Software/Qt/5.6/gcc_64/include/QtNetwork -I/home/vladik/Software/Qt/5.6/gcc_64/include/QtCore src/logic.h -o moc_logic.cpp
+	/home/vladik/Software/Qt/5.6/gcc_64/bin/moc $(DEFINES) -I/home/vladik/Software/Qt/5.6/gcc_64/mkspecs/linux-g++ -I/home/vladik/Projects/Qt/Chess -I/home/vladik/Software/Qt/5.6/gcc_64/include -I/home/vladik/Software/Qt/5.6/gcc_64/include/QtQuick -I/home/vladik/Software/Qt/5.6/gcc_64/include/QtWidgets -I/home/vladik/Software/Qt/5.6/gcc_64/include/QtGui -I/home/vladik/Software/Qt/5.6/gcc_64/include/QtQml -I/home/vladik/Software/Qt/5.6/gcc_64/include/QtNetwork -I/home/vladik/Software/Qt/5.6/gcc_64/include/QtCore src/logic.h -o moc_logic.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -840,6 +840,9 @@ logic.o: src/logic.cpp src/logic.h \
 		../../../Software/Qt/5.6/gcc_64/include/QtCore/QFile \
 		../../../Software/Qt/5.6/gcc_64/include/QtCore/qfile.h \
 		../../../Software/Qt/5.6/gcc_64/include/QtCore/qfiledevice.h \
+		../../../Software/Qt/5.6/gcc_64/include/QtCore/QDir \
+		../../../Software/Qt/5.6/gcc_64/include/QtCore/qdir.h \
+		../../../Software/Qt/5.6/gcc_64/include/QtCore/qfileinfo.h \
 		../../../Software/Qt/5.6/gcc_64/include/QtCore/QDataStream \
 		../../../Software/Qt/5.6/gcc_64/include/QtCore/qdatastream.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o logic.o src/logic.cpp

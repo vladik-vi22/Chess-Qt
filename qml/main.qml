@@ -30,7 +30,6 @@ ApplicationWindow{
     property string winner: "End of Game"
 
     property bool visiblePrevNext: false
-    property bool enabledFigure: false
 
     Button{
         id: newGame
@@ -51,6 +50,8 @@ ApplicationWindow{
             menuWindow.hide();
             visiblePrevNext = false
             gameWindow.show();
+            whiteMove.visible = logic.whiteMove();
+            blackMove.visible = !logic.whiteMove();
         }
     }
 
@@ -73,6 +74,8 @@ ApplicationWindow{
             menuWindow.hide();
             visiblePrevNext = true
             gameWindow.show();
+            whiteMove.visible = logic.whiteMove();
+            blackMove.visible = !logic.whiteMove();
         }
     }
 
@@ -136,7 +139,6 @@ ApplicationWindow{
 
             Repeater {
                 model: logic
-                enabled: true
 
                 Image {
                     visible: alive
@@ -168,7 +170,11 @@ ApplicationWindow{
                             var toX   = (parent.x + mouseX) / squareSize;
                             var toY   = (parent.y + mouseY) / squareSize;
 
-                            logic.move(fromX, fromY, toX, toY);
+                            if(logic.move(fromX, fromY, toX, toY)){
+                                whiteMove.visible = !whiteMove.visible
+                                blackMove.visible = !blackMove.visible
+                            }
+
 
                             if(logic.endGame() === 1){
                                 winner = " White Win! "
@@ -186,6 +192,42 @@ ApplicationWindow{
                     }
                 }
             }
+        }
+
+        Text {
+            id: currentMove
+            text: "Current Move:"
+            x : squareSize * 9 - 22
+            y : squareSize * 2 + 44
+            font.pointSize: 14; font.bold: true
+        }
+
+        Image {
+            id: whiteMove
+
+            visible: true
+
+            height: squareSize
+            width : squareSize
+
+            x: squareSize * 8
+            y: squareSize * 3
+
+            source: images[0].imgPath
+        }
+
+        Image {
+            id: blackMove
+
+            visible: false
+
+            height: squareSize
+            width : squareSize
+
+            x: squareSize * 10
+            y: squareSize * 3
+
+            source: images[1].imgPath
         }
 
         Button {
@@ -218,12 +260,19 @@ ApplicationWindow{
 
             text: "prev"
 
-            onClicked: logic.prevMove()
+            onClicked: {
+                logic.prevMove()
+                gameBoard.enabled = false
+                nextMove.enabled = true
+                if (logic.lastEnablePrevMove())
+                    prevMove.enabled = false
+            }
         }
 
         Button {
             id: nextMove
             visible: visiblePrevNext
+            enabled: false
             anchors.left: gameBoard.right
             anchors.right: parent.right
             anchors.top: prevMove.bottom
@@ -235,8 +284,61 @@ ApplicationWindow{
 
             text: "next"
 
-            onClicked: logic.nextMove()
+            onClicked: {
+                logic.nextMove()
+                prevMove.enabled = true
+                if (logic.lastEnableNextMove()){
+                    nextMove.enabled = false
+                    gameBoard.enabled = true
+                }
+            }
 
+        }
+
+        Button{
+            id: newGameInGame
+            anchors.left: gameBoard.right
+            anchors.right: parent.right
+            anchors.bottom: loadGameInGame.top
+            anchors.leftMargin: 10
+            anchors.rightMargin: 10
+            anchors.topMargin: 10
+            anchors.bottomMargin: 10
+            height: 44
+
+            text: "New Game"
+
+            onClicked: {
+                logic.newGame();
+                menuWindow.hide();
+                visiblePrevNext = false
+                gameWindow.show();
+                whiteMove.visible = logic.whiteMove();
+                blackMove.visible = !logic.whiteMove();
+            }
+        }
+
+        Button{
+            id: loadGameInGame
+            anchors.left: gameBoard.right
+            anchors.right: parent.right
+            anchors.bottom: menu.top
+            anchors.leftMargin: 10
+            anchors.rightMargin: 10
+            anchors.topMargin: 10
+            anchors.bottomMargin: 10
+            height: 44
+
+            text: "Load Game"
+
+            onClicked: {
+                logic.loadGame();
+                menuWindow.hide();
+                visiblePrevNext = true
+                gameWindow.show();
+                whiteMove.visible = logic.whiteMove();
+                blackMove.visible = !logic.whiteMove();
+            }
         }
 
         Button{
@@ -346,11 +448,15 @@ ApplicationWindow{
 
                 onClicked:{
                     logic.nextMove();
+                    prev.enabled = true
+                    if (logic.lastEnableNextMove())
+                        next.enabled = false
                 }
             }
 
             Button {
                 id: prev
+                enabled: false
                 anchors.left: showLastGameBoard.right
                 anchors.top: next.bottom
                 anchors.leftMargin: 10
@@ -364,6 +470,9 @@ ApplicationWindow{
 
                 onClicked:{
                     logic.prevMove();
+                    next.enabled = true
+                    if (logic.lastEnablePrevMove())
+                        prev.enabled = false
                 }
             }
 

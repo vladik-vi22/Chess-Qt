@@ -101,11 +101,9 @@ void Logic::loadGame(){
 
 void Logic::saveGame(){
 
-    QDir DirOfSavedGame("src/SavedGame");
-    QString path = DirOfSavedGame.canonicalPath();
-    QFile FsavedGame(path);
-    FsavedGame.open(QFile::WriteOnly);
-    QDataStream out(&FsavedGame);
+    QFile savedGameF(QDir::currentPath() + "/src/SavedGame");
+    savedGameF.open(QFile::WriteOnly);
+    QDataStream out(&savedGameF);
 
     for (int i = 0; i < 32; ++i){
         out << impl->figures[i].type;
@@ -116,7 +114,6 @@ void Logic::saveGame(){
     out << WhiteMove;
     out << indexMove;
     out << ThisGame.size();
-    std::cout << ThisGame.size();
     for (int i = 0; i < ThisGame.size(); ++i){
         out << ThisGame[i].fromX;
         out << ThisGame[i].fromY;
@@ -124,18 +121,16 @@ void Logic::saveGame(){
         out << ThisGame[i].toY;
         out << ThisGame[i].deadIndex;
     }
-    FsavedGame.close();
+    savedGameF.close();
 }
 
 QList<Figure> Logic::newGameFigures(){
     QList<Figure> NewGameFigures;
     Figure NewFigure;
 
-    QDir DirOfNewGame("src/NewGame");
-    QString path = DirOfNewGame.canonicalPath();
-    QFile FnewGame(path);
-    FnewGame.open(QFile::ReadOnly);
-    QDataStream in(&FnewGame);
+    QFile newGameF(QDir::currentPath() + "/src/NewGame");
+    newGameF.open(QFile::ReadOnly);
+    QDataStream in(&newGameF);
 
     for (int i = 0; i < 32; ++i){
         in >> NewFigure.type;
@@ -144,7 +139,7 @@ QList<Figure> Logic::newGameFigures(){
         in >> NewFigure.alive;
         NewGameFigures.append(NewFigure);
     }
-    FnewGame.close();
+    newGameF.close();
     indexMove = 0;
     WhiteMove = true;
     while (ThisGame.size() != 0)
@@ -160,11 +155,9 @@ QList<Figure> Logic::loadGameFigures(){
     while (ThisGame.size() != 0)
         ThisGame.removeAt(0);
 
-    QDir DirOfSavedGame("src/SavedGame");
-    QString path = DirOfSavedGame.canonicalPath();
-    QFile FloadGame(path);
-    FloadGame.open(QFile::ReadOnly);
-    QDataStream in(&FloadGame);
+    QFile loadGameF(QDir::currentPath() + "/src/SavedGame");
+    loadGameF.open(QFile::ReadOnly);
+    QDataStream in(&loadGameF);
 
     for (int i = 0; i < 32; ++i){
         in >> LoadFigure.type;
@@ -184,7 +177,7 @@ QList<Figure> Logic::loadGameFigures(){
         in >> thisMove.deadIndex;
         ThisGame.append(thisMove);
     }
-    FloadGame.close();
+    loadGameF.close();
     return LoadGameFigures;
 }
 
@@ -279,13 +272,11 @@ QList<FullMove> Logic::lastGameIn(){
     QList<FullMove> LastGameIn;
     FullMove LastGameMove;
 
-    QDir DirOfLastGame("src/LastGame");
-    QString path = DirOfLastGame.canonicalPath();
-    QFile FlastGameIn(path);
-    FlastGameIn.open(QFile::ReadOnly);
-    QDataStream in(&FlastGameIn);
+    QFile lastGameInF(QDir::currentPath() + "/src/LastGame");
+    lastGameInF.open(QFile::ReadOnly);
+    QDataStream in(&lastGameInF);
 
-    for (int i = 0; i < (FlastGameIn.size() / 20); ++i){
+    for (int i = 0; i < (lastGameInF.size() / 20); ++i){
         in >> LastGameMove.fromX;
         in >> LastGameMove.fromY;
         in >> LastGameMove.toX;
@@ -293,17 +284,15 @@ QList<FullMove> Logic::lastGameIn(){
         in >> LastGameMove.deadIndex;
         LastGameIn.append(LastGameMove);
     }
-    FlastGameIn.close();
+    lastGameInF.close();
     return LastGameIn;
 }
 
 void Logic::lastGameOut(){
 
-    QDir DirOfLastGame("src/LastGame");
-    QString path = DirOfLastGame.canonicalPath();
-    QFile FlastGameOut(path);
-    FlastGameOut.open(QFile::WriteOnly);
-    QDataStream out(&FlastGameOut);
+    QFile lastGameOutF(QDir::currentPath() + "/src/LastGame");
+    lastGameOutF.open(QFile::WriteOnly);
+    QDataStream out(&lastGameOutF);
 
     for (int i = 0; i < ThisGame.size(); ++i){
         out << ThisGame[i].fromX;
@@ -312,7 +301,7 @@ void Logic::lastGameOut(){
         out << ThisGame[i].toY;
         out << ThisGame[i].deadIndex;
     }
-    FlastGameOut.close();
+    lastGameOutF.close();
 }
 
 bool Logic::prevMove(){
@@ -344,6 +333,14 @@ bool Logic::prevMove(){
     return false;
 }
 
+bool Logic::enablePrevMove(){
+    return (indexMove > 0);
+}
+
+bool Logic::lastEnablePrevMove(){
+    return (indexMove == 0);
+}
+
 bool Logic::nextMove(){
 
     if (indexMove < ThisGame.size()){
@@ -372,6 +369,18 @@ bool Logic::nextMove(){
         return true;
     }
     return false;
+}
+
+bool Logic::enableNextMove(){
+    return (indexMove < ThisGame.size());
+}
+
+bool Logic::lastEnableNextMove(){
+    return (indexMove == ThisGame.size());
+}
+
+bool Logic::whiteMove(){
+    return WhiteMove;
 }
 
 bool Logic::trueCell(int X, int Y){

@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_Logic_t {
-    QByteArrayData data[37];
-    char stringdata0[388];
+    QByteArrayData data[42];
+    char stringdata0[466];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -50,30 +50,37 @@ QT_MOC_LITERAL(17, 157, 3), // "toX"
 QT_MOC_LITERAL(18, 161, 3), // "toY"
 QT_MOC_LITERAL(19, 165, 8), // "prevMove"
 QT_MOC_LITERAL(20, 174, 8), // "nextMove"
-QT_MOC_LITERAL(21, 183, 8), // "trueCell"
-QT_MOC_LITERAL(22, 192, 1), // "X"
-QT_MOC_LITERAL(23, 194, 1), // "Y"
-QT_MOC_LITERAL(24, 196, 8), // "freeCell"
-QT_MOC_LITERAL(25, 205, 7), // "enemies"
-QT_MOC_LITERAL(26, 213, 5), // "alive"
-QT_MOC_LITERAL(27, 219, 13), // "possibleMoves"
-QT_MOC_LITERAL(28, 233, 11), // "QList<Move>"
-QT_MOC_LITERAL(29, 245, 18), // "possibleMovesPawnW"
-QT_MOC_LITERAL(30, 264, 18), // "possibleMovesPawnB"
-QT_MOC_LITERAL(31, 283, 17), // "possibleMovesRook"
-QT_MOC_LITERAL(32, 301, 19), // "possibleMovesKnight"
-QT_MOC_LITERAL(33, 321, 19), // "possibleMovesBishop"
-QT_MOC_LITERAL(34, 341, 18), // "possibleMovesQueen"
-QT_MOC_LITERAL(35, 360, 17), // "possibleMovesKing"
-QT_MOC_LITERAL(36, 378, 9) // "boardSize"
+QT_MOC_LITERAL(21, 183, 14), // "enablePrevMove"
+QT_MOC_LITERAL(22, 198, 14), // "enableNextMove"
+QT_MOC_LITERAL(23, 213, 18), // "lastEnablePrevMove"
+QT_MOC_LITERAL(24, 232, 18), // "lastEnableNextMove"
+QT_MOC_LITERAL(25, 251, 9), // "whiteMove"
+QT_MOC_LITERAL(26, 261, 8), // "trueCell"
+QT_MOC_LITERAL(27, 270, 1), // "X"
+QT_MOC_LITERAL(28, 272, 1), // "Y"
+QT_MOC_LITERAL(29, 274, 8), // "freeCell"
+QT_MOC_LITERAL(30, 283, 7), // "enemies"
+QT_MOC_LITERAL(31, 291, 5), // "alive"
+QT_MOC_LITERAL(32, 297, 13), // "possibleMoves"
+QT_MOC_LITERAL(33, 311, 11), // "QList<Move>"
+QT_MOC_LITERAL(34, 323, 18), // "possibleMovesPawnW"
+QT_MOC_LITERAL(35, 342, 18), // "possibleMovesPawnB"
+QT_MOC_LITERAL(36, 361, 17), // "possibleMovesRook"
+QT_MOC_LITERAL(37, 379, 19), // "possibleMovesKnight"
+QT_MOC_LITERAL(38, 399, 19), // "possibleMovesBishop"
+QT_MOC_LITERAL(39, 419, 18), // "possibleMovesQueen"
+QT_MOC_LITERAL(40, 438, 17), // "possibleMovesKing"
+QT_MOC_LITERAL(41, 456, 9) // "boardSize"
 
     },
     "Logic\0clear\0\0newGameFigures\0QList<Figure>\0"
     "loadGameFigures\0lastGameIn\0QList<FullMove>\0"
     "newGame\0loadGame\0saveGame\0lastGameOut\0"
     "lastGame\0endGame\0move\0fromX\0fromY\0toX\0"
-    "toY\0prevMove\0nextMove\0trueCell\0X\0Y\0"
-    "freeCell\0enemies\0alive\0possibleMoves\0"
+    "toY\0prevMove\0nextMove\0enablePrevMove\0"
+    "enableNextMove\0lastEnablePrevMove\0"
+    "lastEnableNextMove\0whiteMove\0trueCell\0"
+    "X\0Y\0freeCell\0enemies\0alive\0possibleMoves\0"
     "QList<Move>\0possibleMovesPawnW\0"
     "possibleMovesPawnB\0possibleMovesRook\0"
     "possibleMovesKnight\0possibleMovesBishop\0"
@@ -88,39 +95,44 @@ static const uint qt_meta_data_Logic[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      25,   14, // methods
-       1,  224, // properties
+      30,   14, // methods
+       1,  254, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
        0,       // signalCount
 
  // methods: name, argc, parameters, tag, flags
-       1,    0,  139,    2, 0x02 /* Public */,
-       3,    0,  140,    2, 0x02 /* Public */,
-       5,    0,  141,    2, 0x02 /* Public */,
-       6,    0,  142,    2, 0x02 /* Public */,
-       8,    0,  143,    2, 0x02 /* Public */,
-       9,    0,  144,    2, 0x02 /* Public */,
-      10,    0,  145,    2, 0x02 /* Public */,
-      11,    0,  146,    2, 0x02 /* Public */,
-      12,    0,  147,    2, 0x02 /* Public */,
-      13,    0,  148,    2, 0x02 /* Public */,
-      14,    4,  149,    2, 0x02 /* Public */,
-      19,    0,  158,    2, 0x02 /* Public */,
-      20,    0,  159,    2, 0x02 /* Public */,
-      21,    2,  160,    2, 0x02 /* Public */,
-      24,    2,  165,    2, 0x02 /* Public */,
-      25,    4,  170,    2, 0x02 /* Public */,
-      26,    2,  179,    2, 0x02 /* Public */,
-      27,    2,  184,    2, 0x02 /* Public */,
-      29,    2,  189,    2, 0x02 /* Public */,
-      30,    2,  194,    2, 0x02 /* Public */,
-      31,    2,  199,    2, 0x02 /* Public */,
-      32,    2,  204,    2, 0x02 /* Public */,
-      33,    2,  209,    2, 0x02 /* Public */,
-      34,    2,  214,    2, 0x02 /* Public */,
-      35,    2,  219,    2, 0x02 /* Public */,
+       1,    0,  164,    2, 0x02 /* Public */,
+       3,    0,  165,    2, 0x02 /* Public */,
+       5,    0,  166,    2, 0x02 /* Public */,
+       6,    0,  167,    2, 0x02 /* Public */,
+       8,    0,  168,    2, 0x02 /* Public */,
+       9,    0,  169,    2, 0x02 /* Public */,
+      10,    0,  170,    2, 0x02 /* Public */,
+      11,    0,  171,    2, 0x02 /* Public */,
+      12,    0,  172,    2, 0x02 /* Public */,
+      13,    0,  173,    2, 0x02 /* Public */,
+      14,    4,  174,    2, 0x02 /* Public */,
+      19,    0,  183,    2, 0x02 /* Public */,
+      20,    0,  184,    2, 0x02 /* Public */,
+      21,    0,  185,    2, 0x02 /* Public */,
+      22,    0,  186,    2, 0x02 /* Public */,
+      23,    0,  187,    2, 0x02 /* Public */,
+      24,    0,  188,    2, 0x02 /* Public */,
+      25,    0,  189,    2, 0x02 /* Public */,
+      26,    2,  190,    2, 0x02 /* Public */,
+      29,    2,  195,    2, 0x02 /* Public */,
+      30,    4,  200,    2, 0x02 /* Public */,
+      31,    2,  209,    2, 0x02 /* Public */,
+      32,    2,  214,    2, 0x02 /* Public */,
+      34,    2,  219,    2, 0x02 /* Public */,
+      35,    2,  224,    2, 0x02 /* Public */,
+      36,    2,  229,    2, 0x02 /* Public */,
+      37,    2,  234,    2, 0x02 /* Public */,
+      38,    2,  239,    2, 0x02 /* Public */,
+      39,    2,  244,    2, 0x02 /* Public */,
+      40,    2,  249,    2, 0x02 /* Public */,
 
  // methods: parameters
     QMetaType::Void,
@@ -136,21 +148,26 @@ static const uint qt_meta_data_Logic[] = {
     QMetaType::Bool, QMetaType::Int, QMetaType::Int, QMetaType::Int, QMetaType::Int,   15,   16,   17,   18,
     QMetaType::Bool,
     QMetaType::Bool,
-    QMetaType::Bool, QMetaType::Int, QMetaType::Int,   22,   23,
-    QMetaType::Bool, QMetaType::Int, QMetaType::Int,   22,   23,
+    QMetaType::Bool,
+    QMetaType::Bool,
+    QMetaType::Bool,
+    QMetaType::Bool,
+    QMetaType::Bool,
+    QMetaType::Bool, QMetaType::Int, QMetaType::Int,   27,   28,
+    QMetaType::Bool, QMetaType::Int, QMetaType::Int,   27,   28,
     QMetaType::Bool, QMetaType::Int, QMetaType::Int, QMetaType::Int, QMetaType::Int,   15,   16,   17,   18,
-    QMetaType::Bool, QMetaType::Int, QMetaType::Int,   22,   23,
-    0x80000000 | 28, QMetaType::Int, QMetaType::Int,   15,   16,
-    0x80000000 | 28, QMetaType::Int, QMetaType::Int,   15,   16,
-    0x80000000 | 28, QMetaType::Int, QMetaType::Int,   15,   16,
-    0x80000000 | 28, QMetaType::Int, QMetaType::Int,   15,   16,
-    0x80000000 | 28, QMetaType::Int, QMetaType::Int,   15,   16,
-    0x80000000 | 28, QMetaType::Int, QMetaType::Int,   15,   16,
-    0x80000000 | 28, QMetaType::Int, QMetaType::Int,   15,   16,
-    0x80000000 | 28, QMetaType::Int, QMetaType::Int,   15,   16,
+    QMetaType::Bool, QMetaType::Int, QMetaType::Int,   27,   28,
+    0x80000000 | 33, QMetaType::Int, QMetaType::Int,   15,   16,
+    0x80000000 | 33, QMetaType::Int, QMetaType::Int,   15,   16,
+    0x80000000 | 33, QMetaType::Int, QMetaType::Int,   15,   16,
+    0x80000000 | 33, QMetaType::Int, QMetaType::Int,   15,   16,
+    0x80000000 | 33, QMetaType::Int, QMetaType::Int,   15,   16,
+    0x80000000 | 33, QMetaType::Int, QMetaType::Int,   15,   16,
+    0x80000000 | 33, QMetaType::Int, QMetaType::Int,   15,   16,
+    0x80000000 | 33, QMetaType::Int, QMetaType::Int,   15,   16,
 
  // properties: name, type, flags
-      36, QMetaType::Int, 0x00095401,
+      41, QMetaType::Int, 0x00095401,
 
        0        // eod
 };
@@ -181,29 +198,39 @@ void Logic::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void 
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
         case 12: { bool _r = _t->nextMove();
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
-        case 13: { bool _r = _t->trueCell((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])));
+        case 13: { bool _r = _t->enablePrevMove();
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
-        case 14: { bool _r = _t->freeCell((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])));
+        case 14: { bool _r = _t->enableNextMove();
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
-        case 15: { bool _r = _t->enemies((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3])),(*reinterpret_cast< int(*)>(_a[4])));
+        case 15: { bool _r = _t->lastEnablePrevMove();
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
-        case 16: { bool _r = _t->alive((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])));
+        case 16: { bool _r = _t->lastEnableNextMove();
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
-        case 17: { QList<Move> _r = _t->possibleMoves((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])));
+        case 17: { bool _r = _t->whiteMove();
+            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
+        case 18: { bool _r = _t->trueCell((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])));
+            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
+        case 19: { bool _r = _t->freeCell((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])));
+            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
+        case 20: { bool _r = _t->enemies((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3])),(*reinterpret_cast< int(*)>(_a[4])));
+            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
+        case 21: { bool _r = _t->alive((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])));
+            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
+        case 22: { QList<Move> _r = _t->possibleMoves((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])));
             if (_a[0]) *reinterpret_cast< QList<Move>*>(_a[0]) = _r; }  break;
-        case 18: { QList<Move> _r = _t->possibleMovesPawnW((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])));
+        case 23: { QList<Move> _r = _t->possibleMovesPawnW((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])));
             if (_a[0]) *reinterpret_cast< QList<Move>*>(_a[0]) = _r; }  break;
-        case 19: { QList<Move> _r = _t->possibleMovesPawnB((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])));
+        case 24: { QList<Move> _r = _t->possibleMovesPawnB((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])));
             if (_a[0]) *reinterpret_cast< QList<Move>*>(_a[0]) = _r; }  break;
-        case 20: { QList<Move> _r = _t->possibleMovesRook((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])));
+        case 25: { QList<Move> _r = _t->possibleMovesRook((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])));
             if (_a[0]) *reinterpret_cast< QList<Move>*>(_a[0]) = _r; }  break;
-        case 21: { QList<Move> _r = _t->possibleMovesKnight((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])));
+        case 26: { QList<Move> _r = _t->possibleMovesKnight((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])));
             if (_a[0]) *reinterpret_cast< QList<Move>*>(_a[0]) = _r; }  break;
-        case 22: { QList<Move> _r = _t->possibleMovesBishop((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])));
+        case 27: { QList<Move> _r = _t->possibleMovesBishop((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])));
             if (_a[0]) *reinterpret_cast< QList<Move>*>(_a[0]) = _r; }  break;
-        case 23: { QList<Move> _r = _t->possibleMovesQueen((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])));
+        case 28: { QList<Move> _r = _t->possibleMovesQueen((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])));
             if (_a[0]) *reinterpret_cast< QList<Move>*>(_a[0]) = _r; }  break;
-        case 24: { QList<Move> _r = _t->possibleMovesKing((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])));
+        case 29: { QList<Move> _r = _t->possibleMovesKing((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])));
             if (_a[0]) *reinterpret_cast< QList<Move>*>(_a[0]) = _r; }  break;
         default: ;
         }
@@ -248,13 +275,13 @@ int Logic::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 25)
+        if (_id < 30)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 25;
+        _id -= 30;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 25)
+        if (_id < 30)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 25;
+        _id -= 30;
     }
 #ifndef QT_NO_PROPERTIES
    else if (_c == QMetaObject::ReadProperty || _c == QMetaObject::WriteProperty
