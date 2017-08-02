@@ -3,6 +3,7 @@
 #include <QByteArray>
 #include <QHash>
 #include <QFile>
+#include <QDir>
 #include <QDataStream>
 #include <iostream>
 
@@ -99,9 +100,13 @@ void Logic::loadGame(){
 }
 
 void Logic::saveGame(){
-    QFile FsavedGame("src/SavedGame");
+
+    QDir DirOfSavedGame("src/SavedGame");
+    QString path = DirOfSavedGame.canonicalPath();
+    QFile FsavedGame(path);
     FsavedGame.open(QFile::WriteOnly);
     QDataStream out(&FsavedGame);
+
     for (int i = 0; i < 32; ++i){
         out << impl->figures[i].type;
         out << impl->figures[i].x;
@@ -125,9 +130,13 @@ void Logic::saveGame(){
 QList<Figure> Logic::newGameFigures(){
     QList<Figure> NewGameFigures;
     Figure NewFigure;
-    QFile FnewGame("src/NewGame");
+
+    QDir DirOfNewGame("src/NewGame");
+    QString path = DirOfNewGame.canonicalPath();
+    QFile FnewGame(path);
     FnewGame.open(QFile::ReadOnly);
     QDataStream in(&FnewGame);
+
     for (int i = 0; i < 32; ++i){
         in >> NewFigure.type;
         in >> NewFigure.x;
@@ -145,28 +154,28 @@ QList<Figure> Logic::newGameFigures(){
 
 QList<Figure> Logic::loadGameFigures(){
     int SizeOfThisGame;
-    std::cout << "01";
     QList<Figure> LoadGameFigures;
     Figure LoadFigure;
     FullMove thisMove;
     while (ThisGame.size() != 0)
         ThisGame.removeAt(0);
-    std::cout << "02";
-    QFile FloadGame("src/SavedGame");
+
+    QDir DirOfSavedGame("src/SavedGame");
+    QString path = DirOfSavedGame.canonicalPath();
+    QFile FloadGame(path);
     FloadGame.open(QFile::ReadOnly);
     QDataStream in(&FloadGame);
+
     for (int i = 0; i < 32; ++i){
         in >> LoadFigure.type;
         in >> LoadFigure.x;
         in >> LoadFigure.y;
         in >> LoadFigure.alive;
         LoadGameFigures.append(LoadFigure);
-        std::cout << i;
     }
     in >> WhiteMove;
     in >> indexMove;
     in >> SizeOfThisGame;
-    std::cout << SizeOfThisGame;
     for (int i = 0; i < SizeOfThisGame; ++i){
         in >> thisMove.fromX;
         in >> thisMove.fromY;
@@ -174,7 +183,6 @@ QList<Figure> Logic::loadGameFigures(){
         in >> thisMove.toY;
         in >> thisMove.deadIndex;
         ThisGame.append(thisMove);
-        std::cout << i;
     }
     FloadGame.close();
     return LoadGameFigures;
@@ -270,9 +278,13 @@ void Logic::lastGame(){
 QList<FullMove> Logic::lastGameIn(){
     QList<FullMove> LastGameIn;
     FullMove LastGameMove;
-    QFile FlastGameIn("src/LastGame");
+
+    QDir DirOfLastGame("src/LastGame");
+    QString path = DirOfLastGame.canonicalPath();
+    QFile FlastGameIn(path);
     FlastGameIn.open(QFile::ReadOnly);
     QDataStream in(&FlastGameIn);
+
     for (int i = 0; i < (FlastGameIn.size() / 20); ++i){
         in >> LastGameMove.fromX;
         in >> LastGameMove.fromY;
@@ -286,9 +298,13 @@ QList<FullMove> Logic::lastGameIn(){
 }
 
 void Logic::lastGameOut(){
-    QFile FlastGameOut("src/LastGame");
+
+    QDir DirOfLastGame("src/LastGame");
+    QString path = DirOfLastGame.canonicalPath();
+    QFile FlastGameOut(path);
     FlastGameOut.open(QFile::WriteOnly);
     QDataStream out(&FlastGameOut);
+
     for (int i = 0; i < ThisGame.size(); ++i){
         out << ThisGame[i].fromX;
         out << ThisGame[i].fromY;
