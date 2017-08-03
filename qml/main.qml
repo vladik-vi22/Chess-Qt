@@ -51,6 +51,8 @@ ApplicationWindow{
             nextMove.visible = false
             currentMove.visible = true
             gameBoard.enabled = true
+            saveGame.enabled = true
+            saveGame.visible = true
             whiteMove.visible = logic.whiteMove();
             blackMove.visible = !logic.whiteMove();
             gameWindow.show();
@@ -79,6 +81,8 @@ ApplicationWindow{
             prevMove.enabled = true
             nextMove.enabled = false
             currentMove.visible = true
+            saveGame.enabled = true
+            saveGame.visible = true
             whiteMove.visible = logic.whiteMove();
             blackMove.visible = !logic.whiteMove();
             gameBoard.enabled = true
@@ -112,6 +116,7 @@ ApplicationWindow{
             blackMove.visible = false
             currentMove.visible = false
             gameBoard.enabled = false
+            saveGame.visible = false
             logic.lastGame();
         }
     }
@@ -292,6 +297,7 @@ ApplicationWindow{
             onClicked: {
                 logic.prevMove()
                 gameBoard.enabled = false
+                saveGame.enabled = false
                 nextMove.enabled = true
                 if (logic.lastEnablePrevMove())
                     prevMove.enabled = false
@@ -317,6 +323,7 @@ ApplicationWindow{
                 if (logic.lastEnableNextMove()){
                     nextMove.enabled = false
                     gameBoard.enabled = true
+                    saveGame.enabled = true
                 }
 
                 if(logic.endGame() === 1){
@@ -353,6 +360,8 @@ ApplicationWindow{
                 nextMove.visible = false
                 currentMove.visible = true
                 gameBoard.enabled = true
+                saveGame.visible = true
+                saveGame.enabled = true
                 whiteMove.visible = logic.whiteMove();
                 blackMove.visible = !logic.whiteMove();
             }
@@ -379,6 +388,8 @@ ApplicationWindow{
                 nextMove.enabled = false
                 currentMove.visible = true
                 gameBoard.enabled = true
+                saveGame.visible = true
+                saveGame.enabled = true
                 whiteMove.visible = logic.whiteMove();
                 blackMove.visible = !logic.whiteMove();
             }
