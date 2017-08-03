@@ -1,11 +1,4 @@
 #include "logic.h"
-#include <QList>
-#include <QByteArray>
-#include <QHash>
-#include <QFile>
-#include <QDir>
-#include <QDataStream>
-#include <iostream>
 
 
 struct Logic::Impl
@@ -306,7 +299,7 @@ void Logic::lastGameOut(){
 
 bool Logic::prevMove(){
 
-    if (indexMove > 0){
+    if (enablePrevMove()){
 
         FullMove move = ThisGame[indexMove - 1];
 
@@ -343,7 +336,7 @@ bool Logic::lastEnablePrevMove(){
 
 bool Logic::nextMove(){
 
-    if (indexMove < ThisGame.size()){
+    if (enableNextMove()){
 
         FullMove move = ThisGame[indexMove];
 

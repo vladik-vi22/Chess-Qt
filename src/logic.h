@@ -1,6 +1,13 @@
 #pragma once
 #include <memory>
 #include <QAbstractListModel>
+#include <QList>
+#include <QByteArray>
+#include <QHash>
+#include <QFile>
+#include <QDir>
+#include <QDataStream>
+#include <iostream>
 
 struct Move
 {
@@ -54,30 +61,21 @@ public:
     explicit Logic(QObject *parent = 0);
     ~Logic();
 
-    Q_PROPERTY(int boardSize READ boardSize CONSTANT);
+    Q_PROPERTY(int boardSize READ boardSize CONSTANT)
     int boardSize() const;
 
     Q_INVOKABLE void clear();
-    Q_INVOKABLE QList<Figure> newGameFigures();
-    Q_INVOKABLE QList<Figure> loadGameFigures();
-    Q_INVOKABLE QList<FullMove> lastGameIn();
     Q_INVOKABLE void newGame();
     Q_INVOKABLE void loadGame();
     Q_INVOKABLE void saveGame();
-    Q_INVOKABLE void lastGameOut();
     Q_INVOKABLE void lastGame();
     Q_INVOKABLE int endGame();
     Q_INVOKABLE bool move(int fromX, int fromY, int toX, int toY);
     Q_INVOKABLE bool prevMove();
     Q_INVOKABLE bool nextMove();
-    Q_INVOKABLE bool enablePrevMove();
-    Q_INVOKABLE bool enableNextMove();
     Q_INVOKABLE bool lastEnablePrevMove();
     Q_INVOKABLE bool lastEnableNextMove();
     Q_INVOKABLE bool whiteMove();
-    Q_INVOKABLE bool trueCell(int X, int Y);
-    Q_INVOKABLE bool freeCell(int X, int Y);
-    Q_INVOKABLE bool enemies(int fromX, int fromY, int toX, int toY);
     Q_INVOKABLE bool alive(int X, int Y);
     Q_INVOKABLE QList<Move> possibleMoves(int fromX, int fromY);
 protected:
@@ -88,6 +86,15 @@ protected:
 private:
     struct Impl;
     std::unique_ptr<Impl> impl;
+    QList<Figure> newGameFigures();
+    QList<Figure> loadGameFigures();
+    QList<FullMove> lastGameIn();
+    void lastGameOut();
+    bool enablePrevMove();
+    bool enableNextMove();
+    bool trueCell(int X, int Y);
+    bool freeCell(int X, int Y);
+    bool enemies(int fromX, int fromY, int toX, int toY);
     QList<Move> possibleMovesPawnW(int fromX, int fromY);
     QList<Move> possibleMovesPawnB(int fromX, int fromY);
     QList<Move> possibleMovesRook(int fromX, int fromY);
