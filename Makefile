@@ -539,6 +539,7 @@ qrc_qml.cpp: qml.qrc \
 		qml/main.qml \
 		images/white_king.svg \
 		images/white_queen.svg \
+		images/yellow_square.png \
 		images/black_pawn.svg \
 		images/black_bishop.svg \
 		images/white_bishop.svg \

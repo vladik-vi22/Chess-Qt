@@ -24,7 +24,8 @@ ApplicationWindow{
         {'imgPath' : "/images/white_queen.svg"},
         {'imgPath' : "/images/black_queen.svg"},
         {'imgPath' : "/images/white_king.svg"},
-        {'imgPath' : "/images/black_king.svg"}
+        {'imgPath' : "/images/black_king.svg"},
+        {'imgPath' : "/images/yellow_square.png"}
     ]
 
     property string winner: "End of Game"
@@ -204,6 +205,21 @@ ApplicationWindow{
 
                         }
                     }
+                }
+            }
+        }
+
+        Grid {
+            rows: 8; columns: 8;
+            Repeater{ model:65
+                Image {
+                    id: imageindex
+                    visible: false
+                    height: squareSize
+                    width : squareSize
+                    x: squareSize * index
+                    y: squareSize * index
+                    source: images[12].imgPath
                 }
             }
         }
